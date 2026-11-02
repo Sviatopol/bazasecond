@@ -316,8 +316,8 @@
     }
 
     /* Suggest change sheet */
-    #suggest-change-sheet { max-height: calc(100vh - var(--appbar-h, 110px) - var(--nav-height) - var(--safe-bottom) - 12px); display: flex; flex-direction: column; overflow: hidden; }
-    #suggest-new-sheet { max-height: calc(100vh - var(--appbar-h, 110px) - var(--nav-height) - var(--safe-bottom) - 4px); display: flex; flex-direction: column; overflow: hidden; }
+    #suggest-change-sheet { top: calc(var(--appbar-h, 110px) + 8px); max-height: none; display: flex; flex-direction: column; overflow: hidden; }
+    #suggest-new-sheet { top: calc(var(--appbar-h, 110px) + 4px); max-height: none; display: flex; flex-direction: column; overflow: hidden; }
     .suggest-sheet-header {
       flex-shrink: 0; padding: 0 20px 12px;
       display: flex; align-items: flex-start; justify-content: space-between;
