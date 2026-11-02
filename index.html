@@ -250,6 +250,11 @@
 
     /* Filter sheet */
     #filter-sheet { max-height: 70vh; display: flex; flex-direction: column; overflow: hidden; }
+    .filter-sheet-header {
+      flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+      padding: 4px 16px 8px; border-bottom: 1px solid var(--card-border);
+    }
+    .filter-sheet-title { font-size: 15px; font-weight: 600; }
     #filter-list { overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; }
     .filter-item {
       display: flex; align-items: center; padding: 12px 16px;
@@ -311,8 +316,20 @@
     }
 
     /* Suggest change sheet */
-    #suggest-change-sheet { padding: 0 20px 16px; max-height: 80vh; overflow-y: auto; }
-    #suggest-new-sheet { padding: 0 20px 16px; max-height: 90vh; overflow-y: auto; }
+    #suggest-change-sheet { max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; }
+    #suggest-new-sheet { max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; }
+    .suggest-sheet-header {
+      flex-shrink: 0; padding: 0 20px 12px;
+      display: flex; align-items: flex-start; justify-content: space-between;
+    }
+    .suggest-sheet-header-text { flex: 1; }
+    .sheet-close-btn {
+      flex-shrink: 0; width: 32px; height: 32px; border-radius: 16px;
+      background: var(--surface-variant); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--on-surface); margin-top: 14px; margin-left: 8px;
+    }
+    .suggest-sheet-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 20px 16px; }
     .sheet-title { font-size: 16px; font-weight: 700; margin: 16px 0 4px; }
     .sheet-subtitle { font-size: 13px; color: var(--outline); margin-bottom: 16px; }
     .form-group { margin-bottom: 12px; }
@@ -501,7 +518,7 @@
     <!-- List screen -->
     <div id="list-screen" class="screen active">
       <div id="sort-banner">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg>
         Сортування: від найближчого
         <button id="sort-banner-close" onclick="clearSort()">✕</button>
       </div>
@@ -519,7 +536,7 @@
       </div>
       <div id="map-controls">
         <button class="map-fab" id="location-fab" onclick="goToMyLocation()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg>
         </button>
       </div>
       <!-- Map store panel -->
@@ -670,7 +687,13 @@
 <!-- Filter Sheet -->
 <div class="bottom-sheet" id="filter-sheet">
   <div class="sheet-handle"></div>
-  <div id="filter-list" style="margin-top:8px;"></div>
+  <div class="filter-sheet-header">
+    <span class="filter-sheet-title" id="filter-sheet-title">Фільтр</span>
+    <button class="sheet-close-btn" onclick="closeSheet('filter-sheet')" aria-label="Закрити">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="filter-list"></div>
 </div>
 
 <!-- Store Detail Sheet (from list) -->
@@ -703,14 +726,31 @@
 
 <!-- Suggest Changes Sheet -->
 <div class="bottom-sheet" id="suggest-change-sheet">
-  <div class="sheet-handle" style="margin:12px auto 0;"></div>
-  <div id="suggest-change-content" style="padding:0 20px 16px; max-height:80vh; overflow-y:auto;"></div>
+  <div class="sheet-handle" style="margin:12px auto 0; flex-shrink:0;"></div>
+  <div class="suggest-sheet-header">
+    <div class="suggest-sheet-header-text">
+      <div class="sheet-title" id="suggest-change-title">Запропонувати зміни</div>
+      <div class="sheet-subtitle" id="suggest-change-subtitle"></div>
+    </div>
+    <button class="sheet-close-btn" onclick="closeSheet('suggest-change-sheet')" aria-label="Закрити">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="suggest-change-content" class="suggest-sheet-scroll"></div>
 </div>
 
 <!-- Suggest New Store Sheet -->
 <div class="bottom-sheet" id="suggest-new-sheet">
-  <div class="sheet-handle" style="margin:12px auto 0;"></div>
-  <div id="suggest-new-content" style="padding:0 20px 16px; max-height:90vh; overflow-y:auto;"></div>
+  <div class="sheet-handle" style="margin:12px auto 0; flex-shrink:0;"></div>
+  <div class="suggest-sheet-header">
+    <div class="suggest-sheet-header-text">
+      <div class="sheet-title">Запропонувати секонд</div>
+    </div>
+    <button class="sheet-close-btn" onclick="closeSheet('suggest-new-sheet')" aria-label="Закрити">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="suggest-new-content" class="suggest-sheet-scroll"></div>
 </div>
 
 <!-- Snackbar -->
@@ -718,7 +758,7 @@
 
 <!-- FAB -->
 <button id="near-me-fab" onclick="sortNearMe()">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg>
   Найближчі
 </button>
 
@@ -946,6 +986,7 @@ function clearSort() {
 // ── Filters ────────────────────────────────────────────────────────────────
 function openFilter(type) {
   activeFilterType = type;
+  document.getElementById('filter-sheet-title').textContent = type === 'city' ? 'Місто' : 'День оновлення';
   const list = document.getElementById('filter-list');
   list.innerHTML = '';
 
@@ -963,6 +1004,8 @@ function openFilter(type) {
       renderMap();
     });
     list.appendChild(allItem);
+    const hr0 = document.createElement('hr'); hr0.className = 'filter-divider';
+    list.appendChild(hr0);
 
     const cities = Object.keys(allData).sort();
     cities.forEach(city => {
@@ -1061,7 +1104,7 @@ function goToStoreOnMap(store) {
 
 // ── List rendering ─────────────────────────────────────────────────────────
 function getFilteredStores() {
-  let stores = allData[currentCity] || [];
+  let stores = currentCity ? (allData[currentCity] || []) : Object.values(allData).flat();
   if (currentDay) stores = stores.filter(s => s.updateDay === currentDay);
   if (sortByDistance && userLat !== null) {
     stores = [...stores].sort((a, b) => {
@@ -1124,7 +1167,7 @@ function renderFavs() {
         <div class="store-meta"><div class="day-chip">${iconCalSmall()} ${esc(store.dayLabel)}</div></div>
       </div>
       <button class="fav-btn active" onclick="event.stopPropagation();toggleFav('${fk}',this);renderFavs();">${iconFavFill()}</button>`;
-    card.addEventListener('click', () => openDetail(store));
+    card.addEventListener('click', () => goToStoreOnMap(store));
     container.appendChild(card);
   });
 }
@@ -1212,6 +1255,8 @@ function renderMap() {
   });
   if (currentCity && CITY_CENTERS[currentCity]) {
     mainMap.setView(CITY_CENTERS[currentCity], 13);
+  } else if (!currentCity) {
+    mainMap.setView([49.0, 31.0], 6);
   }
 }
 
@@ -1292,6 +1337,7 @@ function openSuggestChanges() {
 }
 
 function openSuggestChangesSheet(store) {
+  document.getElementById('suggest-change-subtitle').textContent = store.address;
   const content = document.getElementById('suggest-change-content');
   content.innerHTML = buildChangeForm(store);
   openSheet('suggest-change-sheet');
@@ -1299,8 +1345,6 @@ function openSuggestChangesSheet(store) {
 
 function buildChangeForm(store) {
   return `
-    <div class="sheet-title">Запропонувати зміни</div>
-    <div class="sheet-subtitle">${esc(store.address)}</div>
     <div class="toggle-row">
       <span>Секонд закрився</span>
       <button class="toggle" id="closed-toggle" onclick="toggleClosed(this)"></button>
@@ -1360,8 +1404,10 @@ function submitChange(city, address) {
   const day = isClosed ? '' : (document.getElementById('ch-day')?.value || '');
   const lux = isClosed ? '' : (document.getElementById('ch-lux')?.value || '');
   const comment = document.getElementById('ch-comment')?.value?.trim() || '';
-  fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ type:'change', city, address, network, hours:'', lux_day:lux, update_day:day, is_closed: isClosed?'так':'ні', comment }) }).catch(()=>{});
+  fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({ type:'change', city, address, network, hours:'', lux_day:lux, update_day:day, is_closed: isClosed?'так':'ні', comment }) }).catch(()=>{});
   recordSubmit();
+  document.getElementById('suggest-change-subtitle').textContent = '';
+  document.getElementById('suggest-change-title').textContent = '';
   document.getElementById('suggest-change-content').innerHTML = thankYouHtml(() => closeSheet('suggest-change-sheet'));
 }
 
@@ -1374,7 +1420,6 @@ function openSuggestNew() {
 
 function buildNewForm() {
   return `
-    <div class="sheet-title">Запропонувати секонд</div>
     <div class="section-label">Основна інформація</div>
     <div class="form-group">
       <label class="form-label">Місто *</label>
@@ -1451,9 +1496,10 @@ function submitNew() {
   if (!city) { showSnackbar('Оберіть місто'); return; }
   if (!address) { showSnackbar('Вкажіть адресу'); return; }
   if (!day) { showSnackbar('Оберіть день оновлення'); return; }
-  fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ type:'new_store', city, address, maps_url:mapsUrl, update_day:day, network, hours:'', lux_day:lux, comment }) }).catch(()=>{});
+  fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({ type:'new_store', city, address, maps_url:mapsUrl, update_day:day, network, hours:'', lux_day:lux, comment }) }).catch(()=>{});
   recordSubmit();
-  document.getElementById('suggest-new-content').innerHTML = thankYouHtml(() => closeSheet('suggest-new-sheet'));
+  document.querySelector('#suggest-new-sheet .suggest-sheet-header').style.display = 'none';
+  document.getElementById('suggest-new-content').innerHTML = thankYouHtml(() => { document.querySelector('#suggest-new-sheet .suggest-sheet-header').style.display = ''; closeSheet('suggest-new-sheet'); });
 }
 
 // ── Rate limit ─────────────────────────────────────────────────────────────
@@ -1533,7 +1579,7 @@ function iconStoreSmall() { return `<svg width="13" height="13" viewBox="0 0 24 
 function iconCalSmall() { return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`; }
 function iconFavFill() { return `<svg viewBox="0 0 24 24" fill="#E53935" stroke="#E53935" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`; }
 function iconFavOutline() { return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`; }
-function iconNearMe() { return `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>`; }
+function iconNearMe() { return `<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg>`; }
 </script>
 </body>
 </html>
