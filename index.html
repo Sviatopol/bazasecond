@@ -316,8 +316,8 @@
     }
 
     /* Suggest change sheet */
-    #suggest-change-sheet { max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; }
-    #suggest-new-sheet { max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; }
+    #suggest-change-sheet { max-height: calc(100vh - var(--appbar-h, 110px) - var(--nav-height) - var(--safe-bottom) - 12px); display: flex; flex-direction: column; overflow: hidden; }
+    #suggest-new-sheet { max-height: calc(100vh - var(--appbar-h, 110px) - var(--nav-height) - var(--safe-bottom) - 4px); display: flex; flex-direction: column; overflow: hidden; }
     .suggest-sheet-header {
       flex-shrink: 0; padding: 0 20px 12px;
       display: flex; align-items: flex-start; justify-content: space-between;
@@ -821,6 +821,14 @@ function cityName(k) { return CITY_NAMES[k] || k; }
 
 // ── Init ──────────────────────────────────────────────────────────────────
 (async function init() {
+  // Measure appbar height and expose as CSS var for sheet max-height
+  function updateAppbarHeight() {
+    const h = document.getElementById('appbar')?.offsetHeight || 110;
+    document.documentElement.style.setProperty('--appbar-h', h + 'px');
+  }
+  updateAppbarHeight();
+  window.addEventListener('resize', updateAppbarHeight);
+
   // Overlay closes sheets on tap/click outside (use click, not mousedown,
   // so item clicks inside the sheet register first)
   const overlay = document.getElementById('sheet-overlay');
