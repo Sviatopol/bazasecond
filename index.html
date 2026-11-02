@@ -863,6 +863,7 @@ function cityName(k) { return CITY_NAMES[k] || k; }
   loadTodayFilter();
   loadSavedCity();
   await loadData();
+  await autoSelectCity();
   initMainMap();
   renderList();
   renderFavs();
@@ -898,7 +899,6 @@ async function loadData() {
     const cTime = parseInt(localStorage.getItem(CACHE_TIME_KEY) || '0');
     if (cached && Date.now() - cTime < CACHE_TTL) {
       allData = parseData(JSON.parse(cached));
-      autoSelectCity();
       return;
     }
   } catch(e) {}
@@ -908,11 +908,10 @@ async function loadData() {
     localStorage.setItem(CACHE_KEY, JSON.stringify(raw));
     localStorage.setItem(CACHE_TIME_KEY, String(Date.now()));
     allData = parseData(raw);
-    autoSelectCity();
   } catch(e) {
     try {
       const cached = localStorage.getItem(CACHE_KEY);
-      if (cached) { allData = parseData(JSON.parse(cached)); autoSelectCity(); }
+      if (cached) { allData = parseData(JSON.parse(cached)); }
     } catch(e2) {}
   }
 }
@@ -943,12 +942,50 @@ function parseData(raw) {
   return result;
 }
 
-function autoSelectCity() {
-  if (localStorage.getItem('sh_city') === '__all__') return;
-  if (!currentCity || !allData[currentCity]) {
-    currentCity = allData['Львів'] ? 'Львів' : Object.keys(allData)[0];
-    updateCityFilterUI();
+function findNearestCity(lat, lng) {
+  let nearest = null;
+  let minDist = Infinity;
+  for (const [city, [cLat, cLng]] of Object.entries(CITY_CENTERS)) {
+    if (!allData[city]) continue;
+    const R = 6371000;
+    const dLat = (cLat - lat) * Math.PI / 180;
+    const dLng = (cLng - lng) * Math.PI / 180;
+    const a = Math.sin(dLat/2)**2 + Math.cos(lat*Math.PI/180)*Math.cos(cLat*Math.PI/180)*Math.sin(dLng/2)**2;
+    const d = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    if (d < minDist) { minDist = d; nearest = city; }
   }
+  return minDist < 50000 ? nearest : null;
+}
+
+async function autoSelectCity() {
+  // Є збережений вибір — поважаємо його
+  const saved = localStorage.getItem('sh_city');
+  if (saved) return;
+
+  // Немає збереженого — питаємо геолокацію
+  if (navigator.geolocation) {
+    const pos = await new Promise(resolve => {
+      navigator.geolocation.getCurrentPosition(
+        p => resolve(p),
+        () => resolve(null),
+        { timeout: 8000, maximumAge: 300000, enableHighAccuracy: false }
+      );
+    });
+    if (pos) {
+      const nearest = findNearestCity(pos.coords.latitude, pos.coords.longitude);
+      if (nearest) {
+        currentCity = nearest;
+        localStorage.setItem('sh_city', nearest);
+        updateCityFilterUI();
+        return;
+      }
+    }
+  }
+
+  // Фолбек — вся Україна
+  currentCity = null;
+  localStorage.setItem('sh_city', '__all__');
+  updateCityFilterUI();
 }
 
 // ── Location ───────────────────────────────────────────────────────────────
