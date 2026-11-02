@@ -1,0 +1,19 @@
+{
+  "name": "База секондів України",
+  "short_name": "База секондів",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#a84a42",
+  "background_color": "#a84a42",
+  "display": "standalone"
+}
