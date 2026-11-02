@@ -340,6 +340,8 @@
       background: var(--surface); color: var(--on-surface); outline: none;
     }
     .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--green); }
+    .form-input.invalid, .form-select.invalid, .form-textarea.invalid { border-color: #E53935; background: rgba(229,57,53,0.06); }
+    .form-input.invalid:focus, .form-select.invalid:focus { border-color: #E53935; }
     .form-textarea { min-height: 80px; resize: vertical; }
     .form-select { -webkit-appearance: none; appearance: none; }
     .toggle-row {
@@ -1503,20 +1505,35 @@ function handleCityChange(sel) {
 }
 
 function submitNew() {
-  if (!checkRateLimit()) { showSnackbar('Забагато заявок. Спробуйте пізніше.'); return; }
   if (document.getElementById('new-honeypot')?.value) return;
-  const cityRaw = document.getElementById('new-city').value;
-  const city = cityRaw === '__custom__' ? (document.getElementById('new-custom-city').value.trim()) : cityRaw;
-  const address = document.getElementById('new-address').value.trim();
+
+  const cityEl = document.getElementById('new-city');
+  const customCityEl = document.getElementById('new-custom-city');
+  const addressEl = document.getElementById('new-address');
+  const dayEl = document.getElementById('new-day');
+
+  const cityRaw = cityEl.value;
+  const city = cityRaw === '__custom__' ? customCityEl.value.trim() : cityRaw;
+  const address = addressEl.value.trim();
+  const day = dayEl.value;
+
+  // Clear previous errors
+  [cityEl, customCityEl, addressEl, dayEl].forEach(el => el && el.classList.remove('invalid'));
+
+  let valid = true;
+  if (!city) { (cityRaw === '__custom__' ? customCityEl : cityEl).classList.add('invalid'); valid = false; }
+  if (!address) { addressEl.classList.add('invalid'); valid = false; }
+  if (!day) { dayEl.classList.add('invalid'); valid = false; }
+  if (!valid) { showSnackbar('Заповніть обов\'язкові поля'); return; }
+
+  if (!checkRateLimit()) { showSnackbar('Забагато заявок. Спробуйте пізніше.'); return; }
+
   const mapsUrl = document.getElementById('new-maps-url').value.trim();
-  const day = document.getElementById('new-day').value;
   const netRaw = document.getElementById('new-network').value;
   const network = netRaw === '__custom__' ? (document.getElementById('new-custom-net').value.trim()) : netRaw;
   const lux = document.getElementById('new-lux').value;
   const comment = document.getElementById('new-comment').value.trim();
-  if (!city) { showSnackbar('Оберіть місто'); return; }
-  if (!address) { showSnackbar('Вкажіть адресу'); return; }
-  if (!day) { showSnackbar('Оберіть день оновлення'); return; }
+
   fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({ type:'new_store', city, address, maps_url:mapsUrl, update_day:day, network, hours:'', lux_day:lux, comment }) }).catch(()=>{});
   recordSubmit();
   document.querySelector('#suggest-new-sheet .suggest-sheet-header').style.display = 'none';
@@ -1529,7 +1546,7 @@ function checkRateLimit() {
     const times = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '[]');
     const now = Date.now(); const tenMin = 10 * 60 * 1000;
     const recent = times.filter(t => now - t < tenMin);
-    return recent.length < 3;
+    return recent.length < 100;
   } catch(e) { return true; }
 }
 function recordSubmit() {
