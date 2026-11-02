@@ -638,7 +638,7 @@
         </div>
         <div style="height:8px;"></div>
         <div class="info-card">
-          <a class="info-link-tile" href="https://sparashchak.github.io/secondhand-privacy/privacy_policy.html" target="_blank">
+          <a class="info-link-tile" href="#" onclick="openPrivacy(); return false;">
             <div class="info-link-icon" style="background:rgba(45,106,79,0.12);">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>
@@ -649,6 +649,19 @@
           </a>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Privacy screen (overlay) -->
+  <div id="privacy-screen" style="display:none; position:fixed; inset:0; z-index:2000; background:var(--bg); overflow-y:auto; -webkit-overflow-scrolling:touch;">
+    <div style="position:sticky; top:0; z-index:1; background:var(--surface); border-bottom:1px solid var(--card-border); padding: calc(env(safe-area-inset-top,0px) + 12px) 16px 12px; display:flex; align-items:center; gap:8px;">
+      <button onclick="closePrivacy()" style="background:none; border:none; cursor:pointer; padding:4px; color:var(--on-surface); display:flex; align-items:center;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <span style="font-size:16px; font-weight:600;">Політика конфіденційності</span>
+    </div>
+    <div style="padding: 32px 20px 80px; max-width:680px; margin:0 auto; font-family:'Roboto',sans-serif; font-size:15px; line-height:1.7; color:var(--on-surface);">
+      <div id="privacy-content"></div>
     </div>
   </div>
 
@@ -1588,6 +1601,66 @@ function iconCalSmall() { return `<svg width="13" height="13" viewBox="0 0 24 24
 function iconFavFill() { return `<svg viewBox="0 0 24 24" fill="#E53935" stroke="#E53935" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`; }
 function iconFavOutline() { return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`; }
 function iconNearMe() { return `<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg>`; }
+
+// ── Privacy screen ─────────────────────────────────────────────────────────
+const PRIVACY_HTML = `
+<h2 style="font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--green);text-transform:uppercase;margin:0 0 10px;">Загальна інформація</h2>
+<p>База секондів України (<strong>bazasecond.com.ua</strong>) — вебсайт для пошуку секонд-хендів України. Ми серйозно ставимося до вашої приватності й намагаємося збирати мінімум даних, необхідних для роботи сайту.</p>
+<hr style="border:none;border-top:1px solid var(--card-border);margin:24px 0;">
+<h2 style="font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--green);text-transform:uppercase;margin:0 0 10px;">Що ми збираємо</h2>
+<p><strong>Аналітика Google Analytics (анонімна)</strong></p>
+<p>Ми використовуємо Google Analytics 4 для розуміння того, як користувачі взаємодіють із сайтом. Ці дані анонімні та не дозволяють ідентифікувати вас особисто.</p>
+<ul style="padding-left:20px;margin:0 0 14px;">
+  <li>Які сторінки та функції переглядаються</li>
+  <li>Географічний регіон (без точного місцеположення)</li>
+  <li>Тип пристрою та браузер</li>
+  <li>Кількість візитів та їх тривалість</li>
+</ul>
+<p style="font-size:13px;color:var(--on-surface-variant);background:var(--surface-variant);border-left:3px solid var(--green);border-radius:6px;padding:12px 14px;margin:0 0 16px;">Google Analytics не збирає ім'я, email або номер телефону. Ви можете відмовитися від відстеження через <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener" style="color:var(--green);">розширення для браузера</a>.</p>
+<p><strong>Геолокація</strong></p>
+<p>Сайт може запитувати доступ до вашого місцеположення для відображення найближчих магазинів на карті. Координати використовуються лише локально у вашому браузері — ми їх не зберігаємо і нікому не передаємо.</p>
+<p><strong>Обране та налаштування</strong></p>
+<p>Список обраних магазинів і обрані фільтри зберігаються виключно у вашому браузері (localStorage). Ми не маємо доступу до цих даних.</p>
+<p><strong>Пропозиції користувачів</strong></p>
+<p>Якщо ви надсилаєте пропозицію щодо нового магазину або зміни інформації, ми зберігаємо введені вами дані (місто, адреса, коментар) у Google Sheets. Особисті дані не є обов'язковими і не запитуються.</p>
+<hr style="border:none;border-top:1px solid var(--card-border);margin:24px 0;">
+<h2 style="font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--green);text-transform:uppercase;margin:0 0 10px;">Що ми НЕ збираємо</h2>
+<ul style="padding-left:20px;margin:0 0 14px;">
+  <li>Ім'я, email або номер телефону</li>
+  <li>Паролі або платіжну інформацію</li>
+  <li>Точне місцеположення без вашого дозволу</li>
+  <li>Вміст буфера обміну або інших вкладок</li>
+</ul>
+<hr style="border:none;border-top:1px solid var(--card-border);margin:24px 0;">
+<h2 style="font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--green);text-transform:uppercase;margin:0 0 10px;">Сторонні сервіси</h2>
+<ul style="padding-left:20px;margin:0 0 14px;">
+  <li><strong>Google Analytics 4</strong> — анонімна аналітика поведінки</li>
+  <li><strong>OpenStreetMap / Leaflet</strong> — інтерактивна карта (дані © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:var(--green);">OpenStreetMap</a> contributors)</li>
+  <li><strong>Google Maps</strong> — відкриття маршруту (за вашим запитом)</li>
+  <li><strong>Google Sheets</strong> — зберігання пропозицій від користувачів</li>
+</ul>
+<hr style="border:none;border-top:1px solid var(--card-border);margin:24px 0;">
+<h2 style="font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--green);text-transform:uppercase;margin:0 0 10px;">Ваші права</h2>
+<ul style="padding-left:20px;margin:0 0 14px;">
+  <li>Заборонити доступ до геолокації в налаштуваннях браузера</li>
+  <li>Відмовитися від Google Analytics через <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener" style="color:var(--green);">офіційне розширення</a></li>
+  <li>Очистити збережені дані через очищення localStorage у браузері</li>
+</ul>
+<hr style="border:none;border-top:1px solid var(--card-border);margin:24px 0;">
+<h2 style="font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--green);text-transform:uppercase;margin:0 0 10px;">Зв'язок</h2>
+<p>Маєте питання щодо приватності? Напишіть нам: <a href="mailto:sviatoslav.parashchak@gmail.com" style="color:var(--green);">sviatoslav.parashchak@gmail.com</a></p>
+`;
+
+function openPrivacy() {
+  document.getElementById('privacy-content').innerHTML = PRIVACY_HTML;
+  document.getElementById('privacy-screen').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closePrivacy() {
+  document.getElementById('privacy-screen').style.display = 'none';
+  document.body.style.overflow = '';
+}
 </script>
 </body>
 </html>
