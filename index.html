@@ -814,7 +814,9 @@ const DATA_URL = 'https://raw.githubusercontent.com/Sviatopol/secondhand-data/ma
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzs2r9j_MQaybr68_fmWT2kmm8b-8cU4s6GZwecvMoy_4AwO2zZ2l8mWZ5GqrXLAvrirQ/exec';
 const CACHE_KEY = 'sh_data';
 const CACHE_TIME_KEY = 'sh_time';
+const CACHE_VERSION_KEY = 'sh_version';
 const CACHE_TTL = 24 * 60 * 60 * 1000;
+const VERSION_URL = 'https://raw.githubusercontent.com/Sviatopol/secondhand-data/main/data/version.txt';
 const DAYS = ['Понеділок','Вівторок','Середа','Четвер',"П'ятниця",'Субота','Неділя'];
 const DAY_SHORT = {'Понеділок':'пн','Вівторок':'вт','Середа':'ср','Четвер':'чт',"П'ятниця":'пт','Субота':'сб','Неділя':'нд'};
 const NETWORKS = ['Humana','EconomClass','EUROMARKA','КАЛАМБУР','Баул','Тюк','Шмотка','Євро Секонд Хенд','БОМБА'];
@@ -920,23 +922,43 @@ function favKey(city, address) { return `${city}|${address}`; }
 
 // ── Data loading ──────────────────────────────────────────────────────────
 async function loadData() {
-  try {
-    const cached = localStorage.getItem(CACHE_KEY);
-    const cTime = parseInt(localStorage.getItem(CACHE_TIME_KEY) || '0');
-    if (cached && Date.now() - cTime < CACHE_TTL) {
-      allData = parseData(JSON.parse(cached));
+  const cached = localStorage.getItem(CACHE_KEY);
+  const cTime = parseInt(localStorage.getItem(CACHE_TIME_KEY) || '0');
+  const cachedVersion = localStorage.getItem(CACHE_VERSION_KEY) || '';
+
+  // If cache exists and is fresh — check version first (lightweight request)
+  if (cached && Date.now() - cTime < CACHE_TTL) {
+    try {
+      const vResp = await fetch(VERSION_URL + '?t=' + Date.now());
+      const remoteVersion = (await vResp.text()).trim();
+      if (remoteVersion === cachedVersion) {
+        // Same version — use cache
+        allData = parseData(JSON.parse(cached));
+        return;
+      }
+      // Version changed — fall through to fetch fresh data
+    } catch(e) {
+      // No internet — use cache
+      try { allData = parseData(JSON.parse(cached)); } catch(e2) {}
       return;
     }
-  } catch(e) {}
+  }
+
+  // Fetch fresh data
   try {
-    const resp = await fetch(DATA_URL);
-    const raw = await resp.json();
+    const [dataResp, vResp] = await Promise.all([
+      fetch(DATA_URL),
+      fetch(VERSION_URL + '?t=' + Date.now()),
+    ]);
+    const raw = await dataResp.json();
+    const newVersion = (await vResp.text()).trim();
     localStorage.setItem(CACHE_KEY, JSON.stringify(raw));
     localStorage.setItem(CACHE_TIME_KEY, String(Date.now()));
+    localStorage.setItem(CACHE_VERSION_KEY, newVersion);
     allData = parseData(raw);
   } catch(e) {
+    // Fallback to cache if available
     try {
-      const cached = localStorage.getItem(CACHE_KEY);
       if (cached) { allData = parseData(JSON.parse(cached)); }
     } catch(e2) {}
   }
@@ -1691,7 +1713,7 @@ function iconNearMe() { return `<svg width="11" height="11" viewBox="0 0 24 24" 
 // ── Privacy screen ─────────────────────────────────────────────────────────
 const PRIVACY_HTML = `
 <h2 style="font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--green);text-transform:uppercase;margin:0 0 10px;">Загальна інформація</h2>
-<p>База секондів України (<strong>bazasecond.com.ua</strong>) — вебсайт для пошуку секонд-хендів України. Ми серйозно ставимося до вашої приватності й намагаємося збирати мінімум даних, необхідних для роботи сайту.</p>
+<p>База секондів України (<strong>bazasecond.com.ua</strong>) – вебсайт для пошуку секонд-хендів України. Ми серйозно ставимося до вашої приватності й намагаємося збирати мінімум даних, необхідних для роботи сайту.</p>
 <hr style="border:none;border-top:1px solid var(--card-border);margin:24px 0;">
 <h2 style="font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--green);text-transform:uppercase;margin:0 0 10px;">Що ми збираємо</h2>
 <p><strong>Аналітика Google Analytics (анонімна)</strong></p>
