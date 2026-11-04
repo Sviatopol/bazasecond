@@ -213,8 +213,9 @@
     #osm-attribution {
       position: absolute; top: 8px; left: 8px; z-index: 400;
       background: rgba(255,255,255,0.75); border-radius: 6px;
-      padding: 3px 7px; font-size: 10px; color: #333; pointer-events: none;
+      padding: 3px 7px; font-size: 10px; color: #333;
     }
+    #osm-attribution a { color: #333; text-decoration: underline; }
     #map-controls {
       position: absolute; right: 16px;
       bottom: 16px;
@@ -510,6 +511,11 @@
     }
     #snackbar.show { opacity: 1; }
   </style>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
 </head>
 <body>
 <div id="app">
@@ -552,7 +558,7 @@
     <!-- Map screen -->
     <div id="map-screen" class="screen">
       <div id="map"></div>
-      <div id="osm-attribution">© OpenStreetMap contributors</div>
+      <div id="osm-attribution">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors | <a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a></div>
       <div id="map-count">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:var(--green)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
         <span id="map-count-num">0</span>
@@ -665,6 +671,17 @@
             <div class="info-link-body">
               <div class="info-link-title">OpenStreetMap</div>
               <div class="info-link-sub">Дані карти © OpenStreetMap contributors</div>
+            </div>
+            <svg class="info-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+          <div class="info-divider"></div>
+          <a class="info-link-tile" href="https://leafletjs.com" target="_blank">
+            <div class="info-link-icon" style="background:rgba(32,136,54,0.12);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#208836" stroke-width="2"><path d="M12 2C8.5 2 5.5 4.5 5.5 8.5c0 5.25 6.5 11.5 6.5 11.5s6.5-6.25 6.5-11.5C18.5 4.5 15.5 2 12 2z"/><circle cx="12" cy="8.5" r="2.5"/></svg>
+            </div>
+            <div class="info-link-body">
+              <div class="info-link-title">Leaflet</div>
+              <div class="info-link-sub">Бібліотека для відображення карти</div>
             </div>
             <svg class="info-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
           </a>
@@ -1743,7 +1760,7 @@ const PRIVACY_HTML = `
 <h2 style="font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--green);text-transform:uppercase;margin:0 0 10px;">Сторонні сервіси</h2>
 <ul style="padding-left:20px;margin:0 0 14px;">
   <li><strong>Google Analytics 4</strong> — анонімна аналітика поведінки</li>
-  <li><strong>OpenStreetMap / Leaflet</strong> — інтерактивна карта (дані © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:var(--green);">OpenStreetMap</a> contributors)</li>
+  <li><strong>OpenStreetMap / <a href="https://leafletjs.com" target="_blank" rel="noopener" style="color:var(--green);">Leaflet</a></strong> — інтерактивна карта (дані © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:var(--green);">OpenStreetMap</a> contributors)</li>
   <li><strong>Google Maps</strong> — відкриття маршруту (за вашим запитом)</li>
   <li><strong>Google Sheets</strong> — зберігання пропозицій від користувачів</li>
 </ul>
