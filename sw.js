@@ -7,10 +7,10 @@ const STATIC_ASSETS = [
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
 ];
 
-// Network-first URLs (always try network, fall back to cache)
-const NETWORK_FIRST = [
-  'bazasecond.com.ua',
-  'raw.githubusercontent.com/Sviatopol/secondhand-data',
+// These URLs must always go to network — never cache them
+const NEVER_CACHE = [
+  'raw.githubusercontent.com',
+  'script.google.com',
 ];
 
 self.addEventListener('install', event => {
@@ -31,8 +31,14 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = event.request.url;
 
-  // Network-first: index.html and data files
-  if (NETWORK_FIRST.some(pattern => url.includes(pattern))) {
+  // Never cache data files — always fetch from network
+  if (NEVER_CACHE.some(pattern => url.includes(pattern))) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
+  // Network-first for index.html
+  if (url.includes('bazasecond.com.ua') && !url.includes('.')) {
     event.respondWith(
       fetch(event.request)
         .then(response => {
