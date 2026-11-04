@@ -88,6 +88,46 @@
       z-index: 1002;
       position: relative;
     }
+
+    /* ── AppBar transparent overlay on map screen ── */
+    #app.map-active #appbar {
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      background: transparent;
+      pointer-events: none;
+    }
+    #app.map-active #appbar * {
+      pointer-events: auto;
+    }
+    #app.map-active #appbar-top {
+      background: transparent;
+      margin-bottom: 8px;
+    }
+    #app.map-active #appbar h1 {
+      background: rgba(20, 20, 18, 0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 14px;
+      padding: 6px 12px;
+    }
+    #app.map-active #suggest-new-btn {
+      background: rgba(20, 20, 18, 0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-color: rgba(255,255,255,0.7);
+    }
+    #app.map-active .filter-btn {
+      background: rgba(20, 20, 18, 0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    #app.map-active .filter-btn.active {
+      background: rgba(20, 20, 18, 0.82);
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    #app.map-active #content {
+      margin-top: calc(-1 * var(--appbar-h, 110px));
+    }
     #appbar-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
     #appbar h1 { font-size: 17px; font-weight: 700; }
     #suggest-new-btn {
@@ -611,7 +651,7 @@
       <div style="padding:12px 12px 24px;">
         <div class="info-section-header">ПРО САЙТ</div>
         <div class="info-card">
-          <p class="info-text">«База секондів України» — ресурс для пошуку секонд-хендів в Україні, який працює як сайт, телеграм-бот, а згодом буде і додаток.</p>
+          <p class="info-text">«База секондів України» — сайт для пошуку секонд-хендів в Україні.</p>
           <p class="info-text" style="padding-top:0; font-weight:600;">Основні можливості та функціонал:</p>
           <p class="info-text" style="padding-top:0;">• <strong>Пошук секонд-хендів на карті та у списку.</strong> Ви можете легко знайти найближчі секонди у своєму місті або переглянути список секонд-хендів по понад 20 містах країни.</p>
           <p class="info-text" style="padding-top:0;">• <strong>Інформація про кожен магазин.</strong> Для кожної точки вказано точну адресу та день оновлення товару. В окремих моментах може бути згадано деталі про наявність та оновлення відділу «люкс» та назви мережі.</p>
@@ -885,12 +925,13 @@ const CITY_NAMES = {
 function cityName(k) { return CITY_NAMES[k] || k; }
 
 // ── Init ──────────────────────────────────────────────────────────────────
+function updateAppbarHeight() {
+  const h = document.getElementById('appbar')?.offsetHeight || 110;
+  document.documentElement.style.setProperty('--appbar-h', h + 'px');
+}
+
 (async function init() {
   // Measure appbar height and expose as CSS var for sheet max-height
-  function updateAppbarHeight() {
-    const h = document.getElementById('appbar')?.offsetHeight || 110;
-    document.documentElement.style.setProperty('--appbar-h', h + 'px');
-  }
   updateAppbarHeight();
   window.addEventListener('resize', updateAppbarHeight);
 
@@ -1209,6 +1250,8 @@ function switchTab(tab) {
     if (screen) screen.classList.toggle('active', t === tab);
     if (navBtn) navBtn.classList.toggle('active', t === tab);
   });
+  // Transparent appbar overlay on map screen
+  document.getElementById('app').classList.toggle('map-active', tab === 'map');
   // FAB: visible on list tab only
   document.getElementById('near-me-fab').classList.toggle('hidden', tab !== 'list');
   // Filters: visible only on list + map
@@ -1217,6 +1260,8 @@ function switchTab(tab) {
   const titles = { list: 'База секондів', map: 'Карта', favs: 'Обрані', info: 'Інфо' };
   document.getElementById('appbar-title').textContent = titles[tab];
   document.getElementById('suggest-new-btn').style.display = (tab === 'list' || tab === 'map') ? 'flex' : 'none';
+  // Recalculate appbar height after layout shift
+  setTimeout(updateAppbarHeight, 50);
   if (tab === 'map') { setTimeout(() => mainMap && mainMap.invalidateSize(), 100); renderMap(); }
   if (tab === 'favs') renderFavs();
 }
