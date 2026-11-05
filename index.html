@@ -1814,13 +1814,12 @@ async function shareStore(source) {
   const mapsUrl = store.mapsUrl || (store.hasCoords
     ? `https://www.google.com/maps?q=${store.lat},${store.lng}`
     : null);
-  const url = 'https://bazasecond.com.ua/';
-  const text = `Дивись, який секонд є на bazasecond.com.ua!\n${store.address}, ${store.city}${mapsUrl ? '\nMaps: ' + mapsUrl : ''}`;
+  const shareText = `Дивись, який секонд є на bazasecond.com.ua!\n${store.address}, ${store.city}${mapsUrl ? '\nMaps: ' + mapsUrl : ''}\nhttps://bazasecond.com.ua/`;
   if (navigator.share) {
-    try { await navigator.share({ title: 'База секондів України', text, url }); } catch(e) {}
+    try { await navigator.share({ title: 'База секондів України', text: shareText }); } catch(e) {}
   } else {
     try {
-      await navigator.clipboard.writeText(text + '\n' + url);
+      await navigator.clipboard.writeText(shareText);
       showSnackbar('Посилання скопійовано');
     } catch(e) { showSnackbar('Не вдалось скопіювати'); }
   }
