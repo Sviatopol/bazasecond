@@ -379,12 +379,13 @@
     .chip-lux { background: var(--tertiary-container); color: var(--on-tertiary-container); }
     .detail-actions { display: flex; gap: 8px; margin-top: 16px; align-items: center; }
     .btn-maps {
-      flex: 1; background: var(--green); color: white; border: none;
-      border-radius: 12px; padding: 12px; font-size: 14px; font-weight: 500;
+      flex: 1; min-width: 0; background: var(--green); color: white; border: none;
+      border-radius: 12px; padding: 12px 8px; font-size: 13px; font-weight: 500;
       font-family: 'Roboto', sans-serif; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 6px;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      white-space: nowrap; overflow: hidden;
     }
-    .btn-maps svg { width: 18px; height: 18px; }
+    .btn-maps svg { width: 16px; height: 16px; flex-shrink: 0; }
     .btn-icon {
       width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
       background: none; border: 1px solid var(--card-border); cursor: pointer;
@@ -674,6 +675,9 @@
           <button class="btn-icon" id="panel-fav-btn" onclick="togglePanelFav()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           </button>
+          <button class="btn-icon" onclick="shareStore('panel')" title="Поширити">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          </button>
           <button class="btn-icon" onclick="openSuggestChangesFromPanel()" title="Запропонувати зміни">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </button>
@@ -864,6 +868,9 @@
       </button>
       <button class="btn-icon" id="detail-fav-btn" onclick="toggleDetailFav()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+      <button class="btn-icon" onclick="shareStore('detail')" title="Поширити">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
       </button>
       <button class="btn-icon" onclick="openSuggestChanges()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -1797,6 +1804,25 @@ function renderChips(store, containerId) {
   el.innerHTML += `<div class="info-chip chip-yellow">${iconCalSmall()} ${esc(store.dayLabel)}</div>`;
   if (store.luxDay) {
     el.innerHTML += `<br><div class="info-chip chip-lux" style="margin-top:6px;">⭐ Люкс: ${esc(store.luxDay)}</div>`;
+  }
+}
+
+// ── Share ──────────────────────────────────────────────────────────────────
+async function shareStore(source) {
+  const store = source === 'panel' ? panelStore : selectedStore;
+  if (!store) return;
+  const mapsUrl = store.mapsUrl || (store.hasCoords
+    ? `https://www.google.com/maps?q=${store.lat},${store.lng}`
+    : null);
+  const url = 'https://bazasecond.com.ua/';
+  const text = `Дивись, який секонд є на bazasecond.com.ua!\n${store.address}, ${store.city}${mapsUrl ? '\nMaps: ' + mapsUrl : ''}`;
+  if (navigator.share) {
+    try { await navigator.share({ title: 'База секондів України', text, url }); } catch(e) {}
+  } else {
+    try {
+      await navigator.clipboard.writeText(text + '\n' + url);
+      showSnackbar('Посилання скопійовано');
+    } catch(e) { showSnackbar('Не вдалось скопіювати'); }
   }
 }
 
