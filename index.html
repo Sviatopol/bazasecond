@@ -1158,6 +1158,15 @@ function findNearestCity(lat, lng) {
 }
 
 async function autoSelectCity() {
+  // Міська сторінка — data-city на <body>
+  const bodyCity = document.body.dataset.city;
+  if (bodyCity && allData[bodyCity]) {
+    currentCity = bodyCity;
+    localStorage.setItem('sh_city', bodyCity);
+    updateCityFilterUI();
+    return;
+  }
+
   // Є збережений вибір — поважаємо його
   const saved = localStorage.getItem('sh_city');
   if (saved) return;
@@ -1264,6 +1273,7 @@ function openFilter(type) {
     allItem.addEventListener('click', () => {
       currentCity = null;
       localStorage.setItem('sh_city', '__all__');
+      history.replaceState(null, '', '/');
       closeAllSheets();
       updateCityFilterUI();
       renderList();
@@ -1282,6 +1292,10 @@ function openFilter(type) {
       item.addEventListener('click', () => {
         currentCity = city;
         localStorage.setItem('sh_city', city);
+        // Оновлюємо URL без перезавантаження
+        const slugMap = {"Львів":"lviv","Київ":"kyiv","Харків":"kharkiv","Дніпро":"dnipro","Одеса":"odesa","Тернопіль":"ternopil","Івано-Франківськ":"ivano-frankivsk","Рівне":"rivne","Чернівці":"chernivtsi","Луцьк":"lutsk","Житомир":"zhytomyr","Хмельницький":"khmelnytskyi","Ужгород":"uzhgorod","Вінниця":"vinnytsia","Черкаси":"cherkasy","Полтава":"poltava","Чернігів":"chernihiv","Суми":"sumy","Кропивницький":"kropyvnytskyi","Миколаїв":"mykolaiv","Херсон":"kherson"};
+        const slug = slugMap[city];
+        if (slug) history.replaceState(null, '', '/' + slug + '/');
         closeAllSheets();
         updateCityFilterUI();
         renderList();
