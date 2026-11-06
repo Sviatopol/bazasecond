@@ -1158,7 +1158,7 @@ function findNearestCity(lat, lng) {
 }
 
 async function autoSelectCity() {
-  // Міська сторінка — data-city на <body>
+  // Міська сторінка — data-city на <body> завжди має пріоритет
   const bodyCity = document.body.dataset.city;
   if (bodyCity && allData[bodyCity]) {
     currentCity = bodyCity;
@@ -1167,9 +1167,14 @@ async function autoSelectCity() {
     return;
   }
 
-  // Є збережений вибір — поважаємо його
+  // Є збережений вибір — поважаємо його (тільки якщо не міська сторінка)
   const saved = localStorage.getItem('sh_city');
-  if (saved) return;
+  if (saved && saved !== '__all__') {
+    currentCity = saved === '__all__' ? null : (allData[saved] ? saved : null);
+    updateCityFilterUI();
+    return;
+  }
+  if (saved === '__all__') { currentCity = null; updateCityFilterUI(); return; }
 
   // Немає збереженого — питаємо геолокацію
   if (navigator.geolocation) {
@@ -1274,6 +1279,7 @@ function openFilter(type) {
       currentCity = null;
       localStorage.setItem('sh_city', '__all__');
       history.replaceState(null, '', '/');
+      document.title = 'Секонд-хенди в Україні - Львів, Київ, Харків, Дніпро, Одеса та інші міста | База секондів';
       closeAllSheets();
       updateCityFilterUI();
       renderList();
@@ -1296,6 +1302,7 @@ function openFilter(type) {
         const slugMap = {"Львів":"lviv","Київ":"kyiv","Харків":"kharkiv","Дніпро":"dnipro","Одеса":"odesa","Тернопіль":"ternopil","Івано-Франківськ":"ivano-frankivsk","Рівне":"rivne","Чернівці":"chernivtsi","Луцьк":"lutsk","Житомир":"zhytomyr","Хмельницький":"khmelnytskyi","Ужгород":"uzhgorod","Вінниця":"vinnytsia","Черкаси":"cherkasy","Полтава":"poltava","Чернігів":"chernihiv","Суми":"sumy","Кропивницький":"kropyvnytskyi","Миколаїв":"mykolaiv","Херсон":"kherson"};
         const slug = slugMap[city];
         if (slug) history.replaceState(null, '', '/' + slug + '/');
+        document.title = `Секонд-хенди у ${city} — адреси, карта, дні поповнення | База секондів України`;
         closeAllSheets();
         updateCityFilterUI();
         renderList();
