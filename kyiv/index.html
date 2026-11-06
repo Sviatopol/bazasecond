@@ -36,8 +36,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="/vendor/leaflet.css" />
+  <script src="/vendor/leaflet.js"></script>
   <style>
     /* ── CSS Variables (from app_theme.dart — Material 3) ── */
     :root {
@@ -2471,7 +2471,7 @@ function findNearestCity(lat, lng) {
 }
 
 async function autoSelectCity() {
-  // Міська сторінка — data-city на <body>
+  // Міська сторінка — data-city на <body> завжди має пріоритет
   const bodyCity = document.body.dataset.city;
   if (bodyCity && allData[bodyCity]) {
     currentCity = bodyCity;
@@ -2480,9 +2480,14 @@ async function autoSelectCity() {
     return;
   }
 
-  // Є збережений вибір — поважаємо його
+  // Є збережений вибір — поважаємо його (тільки якщо не міська сторінка)
   const saved = localStorage.getItem('sh_city');
-  if (saved) return;
+  if (saved && saved !== '__all__') {
+    currentCity = saved === '__all__' ? null : (allData[saved] ? saved : null);
+    updateCityFilterUI();
+    return;
+  }
+  if (saved === '__all__') { currentCity = null; updateCityFilterUI(); return; }
 
   // Немає збереженого — питаємо геолокацію
   if (navigator.geolocation) {
@@ -2586,6 +2591,8 @@ function openFilter(type) {
     allItem.addEventListener('click', () => {
       currentCity = null;
       localStorage.setItem('sh_city', '__all__');
+      history.replaceState(null, '', '/');
+      document.title = 'Секонд-хенди в Україні - Львів, Київ, Харків, Дніпро, Одеса та інші міста | База секондів';
       closeAllSheets();
       updateCityFilterUI();
       renderList();
@@ -2604,6 +2611,13 @@ function openFilter(type) {
       item.addEventListener('click', () => {
         currentCity = city;
         localStorage.setItem('sh_city', city);
+        // Оновлюємо URL без перезавантаження
+        const slugMap = {"Львів":"lviv","Київ":"kyiv","Харків":"kharkiv","Дніпро":"dnipro","Одеса":"odesa","Тернопіль":"ternopil","Івано-Франківськ":"ivano-frankivsk","Рівне":"rivne","Чернівці":"chernivtsi","Луцьк":"lutsk","Житомир":"zhytomyr","Хмельницький":"khmelnytskyi","Ужгород":"uzhgorod","Вінниця":"vinnytsia","Черкаси":"cherkasy","Полтава":"poltava","Чернігів":"chernihiv","Суми":"sumy","Кропивницький":"kropyvnytskyi","Миколаїв":"mykolaiv","Херсон":"kherson"};
+        const slug = slugMap[city];
+        if (slug) history.replaceState(null, '', '/' + slug + '/');
+        const cityLocative = {"Львів":"Львові","Київ":"Києві","Харків":"Харкові","Дніпро":"Дніпрі","Одеса":"Одесі","Тернопіль":"Тернополі","Івано-Франківськ":"Івано-Франківську","Рівне":"Рівному","Чернівці":"Чернівцях","Луцьк":"Луцьку","Житомир":"Житомирі","Хмельницький":"Хмельницькому","Ужгород":"Ужгороді","Вінниця":"Вінниці","Черкаси":"Черкасах","Полтава":"Полтаві","Чернігів":"Чернігові","Суми":"Сумах","Кропивницький":"Кропивницькому","Миколаїв":"Миколаєві","Херсон":"Херсоні"};
+        const cityInLoc = cityLocative[city] || city;
+        document.title = `Секонд-хенди у ${cityInLoc} — адреси, карта, дні поповнення | База секондів України`;
         closeAllSheets();
         updateCityFilterUI();
         renderList();
@@ -3249,6 +3263,7 @@ const PRIVACY_HTML = `
   <li><strong>OpenStreetMap / <a href="https://leafletjs.com" target="_blank" rel="noopener" style="color:var(--green);">Leaflet</a></strong> — інтерактивна карта (дані © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:var(--green);">OpenStreetMap</a> contributors)</li>
   <li><strong>Google Maps</strong> — відкриття маршруту (за вашим запитом)</li>
   <li><strong>Google Sheets</strong> — зберігання пропозицій від користувачів</li>
+  <li><strong>Google AdSense</strong> — показ рекламних оголошень. AdSense може використовувати файли cookie для персоналізації реклами на основі ваших попередніх відвідувань сайтів. Докладніше: <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener" style="color:var(--green);">Політика реклами Google</a></li>
 </ul>
 <hr style="border:none;border-top:1px solid var(--card-border);margin:24px 0;">
 <h2 style="font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--green);text-transform:uppercase;margin:0 0 10px;">Ваші права</h2>
