@@ -14,9 +14,9 @@
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1472109228369865"
      crossorigin="anonymous"></script>
-  <title>База секондів України — знайди секонд-хенд поряд</title>
-  <meta name="description" content="Інтерактивна карта секонд-хендів України. Знайди найближчий секонд, дізнайся дні поповнення та адреси магазинів Humana, EconomClass, EUROMARKA та інших мереж.">
-  <meta name="keywords" content="секонд-хенд, секонд хенд, секонд, Україна, Humana, EconomClass, EUROMARKA, Баул, Тюк, карта секондів, де секонд">
+  <title>Секонд-хенди в Україні - Львів, Київ, Харків, Дніпро, Одеса та інші міста | База секондів</title>
+  <meta name="description" content="Знайди секонд-хенд поруч: Львів, Київ, Харків, Дніпро, Одеса, Тернопіль, Івано-Франківськ та багато інших міст України. Адреси, дні поповнення, карта. Humana, EconomClass, EUROMARKA, Євро Тренд, Євро Секонд Хенд, Світ Секонд-хенду та інші мережі.">
+  <meta name="keywords" content="секонд-хенд, секонд хенд, секонд, Україна, Львів, Київ, Харків, Дніпро, Одеса, Тернопіль, Івано-Франківськ, Вінниця, Хмельницький, Рівне, Чернівці, Humana, EconomClass, EUROMARKA, Євро Тренд, Євро Секонд Хенд, Світ Секонд-хенду, карта секондів, де секонд, секонд-хенди міста">
   <meta property="og:title" content="База секондів України">
   <meta property="og:description" content="Інтерактивна карта секонд-хендів України. Знайди найближчий секонд, дізнайся дні поповнення.">
   <meta property="og:url" content="https://bazasecond.com.ua/">
@@ -1007,6 +1007,7 @@ function updateAppbarHeight() {
   loadTodayFilter();
   loadSavedCity();
   await loadData();
+  injectJsonLd();
   await autoSelectCity();
   initMainMap();
   renderList();
@@ -1014,6 +1015,41 @@ function updateAppbarHeight() {
   tryGetLocation();
   switchTab('map');
 })();
+
+function injectJsonLd() {
+  const stores = Object.entries(allData).flatMap(([city, list]) =>
+    list.map(s => ({
+      "@type": "LocalBusiness",
+      "name": s.network ? s.network + ' (' + city + ')' : 'Секонд-хенд ' + city,
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": s.address,
+        "addressLocality": city,
+        "addressCountry": "UA"
+      },
+      ...(s.lat && s.lng ? { "geo": { "@type": "GeoCoordinates", "latitude": s.lat, "longitude": s.lng } } : {}),
+      ...(s.mapsUrl ? { "hasMap": s.mapsUrl } : {})
+    }))
+  );
+  if (!stores.length) return;
+  const ld = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Секонд-хенди України",
+    "description": "Список секонд-хендів у містах України: адреси, мережі, дні поповнення.",
+    "url": "https://bazasecond.com.ua/",
+    "numberOfItems": stores.length,
+    "itemListElement": stores.map((s, i) => ({
+      "@type": "ListItem",
+      "position": i + 1,
+      "item": s
+    }))
+  };
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.textContent = JSON.stringify(ld);
+  document.head.appendChild(script);
+}
 
 function loadTodayFilter() {
   const wd = new Date().getDay(); // 0=sun
