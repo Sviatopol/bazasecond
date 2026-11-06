@@ -1,0 +1,2417 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RY8SDZLGH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7RY8SDZLGH');
+  </script>
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1472109228369865"
+     crossorigin="anonymous"></script>
+  <title>Секонд-хенди у Херсоні — адреси, карта, дні поповнення | База секондів України</title>
+  <meta name="description" content="Секонд-хенди Херсона на карті. Humana, EconomClass, EUROMARKA, Євро Секонд Хенд та інші мережі. Адреси, дні поповнення та інша інформація. Оновлюється користувачами регулярно.">
+  <meta name="keywords" content="секонд-хенд херсон, секонд херсон, секонд-хенди херсона, Херсон, секонд-хенд, Humana, EconomClass, EUROMARKA">
+  <meta property="og:title" content="Секонд-хенди Херсона | База секондів України">
+  <meta property="og:description" content="Секонд-хенди Херсона на карті. Humana, EconomClass, EUROMARKA, Євро Секонд Хенд та інші мережі. Адреси, дні поповнення та інша інформація. Оновлюється користувачами регулярно.">
+  <meta property="og:url" content="https://bazasecond.com.ua/kherson/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://bazasecond.com.ua/icon-512.png">
+  <link rel="canonical" href="https://bazasecond.com.ua/kherson/">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#a84a42">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#a84a42">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    /* ── CSS Variables (from app_theme.dart — Material 3) ── */
+    :root {
+      /* seed: #4CAF80, brightness: dark */
+      --green: #4CAF80;
+      --green-light: #4CAF80;
+      --yellow: #F0C040;
+      --yellow-text: #1A1A00;
+      --appbar-bg: #1E1E1B;
+      --appbar-fg: #F0EEE8;
+      --bg: #141412;
+      --surface: #242420;
+      --card-border: #2E2E2A;
+      --outline: #8A8880;
+      --chip-bg: #1E1E1B;
+      --on-surface: #F0EEE8;
+      --surface-variant: #2E2E2A;
+      --primary-container: #1B4332;
+      --on-primary-container: #AEECC9;
+      --secondary-container: #3E3A00;
+      --on-secondary-container: #FFF0B3;
+      --tertiary-container: #004C72;
+      --on-tertiary-container: #CCE8FF;
+      --nav-height: 64px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      height: 100%;
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      color: var(--on-surface);
+      overflow: hidden;
+    }
+
+    /* ── App shell ── */
+    #app { display: flex; flex-direction: column; height: 100%; }
+
+    /* ── AppBar ── */
+    #appbar {
+      background: var(--appbar-bg);
+      color: var(--appbar-fg);
+      padding: 12px 16px 0;
+      padding-top: calc(12px + env(safe-area-inset-top, 0px));
+      flex-shrink: 0;
+      z-index: 1002;
+      position: relative;
+    }
+
+    /* ── AppBar compact on list screen (no title row) ── */
+    #app.list-active #appbar {
+      padding: 0 16px 0;
+    }
+    #app.list-active #filters {
+      padding-top: calc(env(safe-area-inset-top, 0px) + 20px);
+      padding-bottom: 10px;
+    }
+
+    /* ── AppBar transparent overlay on map screen ── */
+    #app.map-active #appbar {
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      background: transparent;
+      pointer-events: none;
+    }
+    #app.map-active #appbar * {
+      pointer-events: auto;
+    }
+    #app.map-active #appbar-top {
+      display: none;
+    }
+    #app.map-active #filters {
+      padding-top: calc(env(safe-area-inset-top, 0px) + 6px);
+      padding-bottom: 10px;
+    }
+    #app.map-active .filter-btn {
+      background: rgba(20, 20, 18, 0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    #app.map-active .filter-btn.active {
+      background: rgba(20, 20, 18, 0.82);
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    #app.map-active #content {
+      margin-top: calc(-1 * var(--appbar-h, 110px));
+    }
+    #appbar-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    #appbar h1 { font-size: 17px; font-weight: 700; }
+    #suggest-new-btn {
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.7);
+      color: var(--appbar-fg);
+      font-size: 13px;
+      font-family: 'Roboto', sans-serif;
+      padding: 5px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 4px;
+      white-space: nowrap;
+    }
+    #suggest-new-btn:active { opacity: 0.8; }
+
+    /* Filters row */
+    #filters { display: flex; gap: 8px; padding-bottom: 10px; }
+    .filter-btn {
+      flex: 1; display: flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: none; border-radius: 10px; padding: 7px 10px;
+      color: var(--appbar-fg); font-size: 12px; font-family: 'Roboto', sans-serif;
+      cursor: pointer; transition: background 0.15s;
+      min-width: 0;
+    }
+    .filter-btn.active { background: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.8); }
+    .filter-btn span { flex: 1; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .filter-btn .arrow { opacity: 0.8; flex-shrink: 0; }
+    .filter-icon { flex-shrink: 0; width: 15px; height: 15px; }
+
+    /* ── Content area ── */
+    #content {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      /* subtract navbar so map never bleeds under it */
+      margin-bottom: calc(var(--nav-height) + var(--safe-bottom));
+    }
+
+    /* ── Tabs (screens) ── */
+    .screen { display: none; height: 100%; overflow-y: auto; }
+    .screen.active { display: block; }
+    #map-screen { position: relative; height: 100%; overflow: visible; }
+    #map { width: 100%; height: 100%; }
+
+    /* ── LIST screen ── */
+    #list-content { padding: 12px 12px 24px; }
+
+    /* Sort banner */
+    #sort-banner {
+      display: none; background: var(--primary-container); color: var(--on-primary-container);
+      padding: 6px 16px; font-size: 12px; font-weight: 500;
+      align-items: center; gap: 6px;
+    }
+    #sort-banner.visible { display: flex; }
+    #sort-banner-close { margin-left: auto; cursor: pointer; opacity: 0.7; }
+
+    /* Empty state */
+    #empty-state { text-align: center; padding: 60px 20px; color: var(--outline); font-size: 15px; display: none; }
+
+    /* Store card */
+    .store-card {
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 8px;
+      display: flex; align-items: center; gap: 10px;
+      cursor: pointer;
+      transition: opacity 0.1s;
+      -webkit-user-select: none; user-select: none;
+    }
+    .store-card:active { opacity: 0.75; }
+    .store-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--primary-container); color: var(--on-primary-container);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .store-icon svg { width: 20px; height: 20px; }
+    .store-info { flex: 1; min-width: 0; }
+    .store-address { font-size: 13px; font-weight: 500; line-height: 1.3; }
+    .store-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+    .day-chip {
+      background: var(--yellow); color: var(--yellow-text);
+      font-size: 10px; font-weight: 700;
+      padding: 2px 7px; border-radius: 5px; white-space: nowrap;
+    }
+    .dist-label { font-size: 11px; color: var(--outline); display: flex; align-items: center; gap: 2px; }
+    .fav-btn {
+      background: none; border: none; cursor: pointer; padding: 6px;
+      color: var(--outline); flex-shrink: 0;
+      transition: color 0.15s;
+    }
+    .fav-btn.active { color: #A84A42; }
+    .fav-btn svg { width: 22px; height: 22px; }
+
+    /* FAB */
+    #near-me-fab {
+      position: fixed;
+      right: 16px;
+      bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: 'Roboto', sans-serif;
+      display: flex; align-items: center; gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: background 0.2s, opacity 0.2s;
+      z-index: 5;
+    }
+    #near-me-fab.active { background: var(--primary-container); color: var(--on-primary-container); }
+    #near-me-fab:active { opacity: 0.85; }
+    #near-me-fab.hidden { display: none !important; }
+
+    /* Suggest FAB (list screen, above near-me-fab) */
+    #suggest-list-fab {
+      position: fixed;
+      right: 16px;
+      bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px + 48px + 10px);
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: 'Roboto', sans-serif;
+      display: flex; align-items: center; gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: background 0.2s, opacity 0.2s;
+      z-index: 5;
+    }
+    #suggest-list-fab:active { opacity: 0.85; }
+    #suggest-list-fab.hidden { display: none !important; }
+
+    /* ── MAP screen ── */
+    #osm-attribution {
+      position: absolute; top: 8px; left: 8px; z-index: 400;
+      background: rgba(255,255,255,0.75); border-radius: 6px;
+      padding: 3px 7px; font-size: 10px; color: #333;
+    }
+    #osm-attribution a { color: #333; text-decoration: underline; }
+    #map-controls {
+      position: absolute; right: 16px;
+      bottom: 16px;
+      display: flex; flex-direction: column; gap: 10px; z-index: 400; align-items: flex-end;
+    }
+    .map-fab {
+      width: 56px; height: 56px; border-radius: 16px;
+      background: var(--surface); color: var(--on-surface);
+      border: none; cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .map-fab svg { width: 26px; height: 26px; }
+    #map-count {
+      position: absolute; left: 12px;
+      bottom: 16px;
+      z-index: 400;
+      background: var(--surface); border-radius: 20px;
+      padding: 6px 10px; font-size: 12px; font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      display: flex; align-items: center; gap: 4px; color: var(--on-surface);
+    }
+
+    /* ── FAVORITES screen ── */
+    #favs-content { padding: 12px 12px 24px; }
+    #favs-empty { text-align: center; padding: 60px 20px; color: var(--outline); font-size: 15px; display: flex; flex-direction: column; align-items: center; }
+
+    /* ── Bottom sheet ── */
+    #sheet-overlay {
+      position: fixed; left: 0; right: 0; top: 0;
+      bottom: calc(var(--nav-height) + var(--safe-bottom));
+      background: rgba(0,0,0,0.4);
+      z-index: 1000; opacity: 0; pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    #sheet-overlay.visible { opacity: 1; pointer-events: auto; }
+    .bottom-sheet {
+      position: fixed; left: 0; right: 0;
+      bottom: calc(var(--nav-height) + var(--safe-bottom));
+      z-index: 1001;
+      background: var(--surface);
+      border-radius: 20px 20px 0 0;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.15);
+      transform: translateY(100%);
+      transition: transform 0.28s cubic-bezier(0.25,0.46,0.45,0.94);
+      padding-bottom: 8px;
+    }
+    .bottom-sheet.open { transform: translateY(0); }
+    .bottom-sheet { pointer-events: auto; }
+    .sheet-handle {
+      width: 36px; height: 4px; border-radius: 2px;
+      background: rgba(0,0,0,0.2); margin: 12px auto 0;
+    }
+
+    /* Filter sheet */
+    #filter-sheet { max-height: 70vh; display: flex; flex-direction: column; overflow: hidden; }
+    .filter-sheet-header {
+      flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+      padding: 4px 16px 8px; border-bottom: 1px solid var(--card-border);
+    }
+    .filter-sheet-title { font-size: 15px; font-weight: 600; }
+    #filter-list { overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; }
+    .filter-item {
+      display: flex; align-items: center; padding: 12px 16px;
+      cursor: pointer; font-size: 15px; gap: 12px;
+    }
+    .filter-item:active { background: var(--chip-bg); }
+    .filter-item .fi-label { flex: 1; }
+    .filter-item .fi-check { color: var(--green); display: none; }
+    .filter-item.selected .fi-label { font-weight: 600; color: var(--green); }
+    .filter-item.selected .fi-check { display: block; }
+    .filter-item .fi-count {
+      background: var(--chip-bg); border-radius: 12px;
+      padding: 1px 8px; font-size: 12px; font-weight: 600;
+    }
+    .filter-item.selected .fi-count { background: var(--primary-container); color: var(--on-primary-container); }
+    .filter-divider { border: none; border-top: 1px solid var(--card-border); margin: 0 16px; }
+
+    /* Store detail sheet */
+    #detail-sheet { padding: 0 20px 12px; }
+    #detail-map { height: 220px; border-radius: 0; margin: 0 -20px; overflow: hidden; position: relative; }
+    #detail-leaflet { width: 100%; height: 100%; }
+    #detail-back {
+      position: absolute; top: 12px; left: 12px; z-index: 400;
+      width: 36px; height: 36px; border-radius: 18px;
+      background: var(--surface); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .detail-city { font-size: 12px; font-weight: 600; color: var(--green); margin-top: 14px; }
+    .detail-address { font-size: 15px; font-weight: 600; margin: 4px 0 10px; line-height: 1.3; }
+    .info-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 10px; border-radius: 8px;
+      font-size: 12px; font-weight: 600; margin-bottom: 6px;
+    }
+    .info-chip svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .chip-yellow { background: var(--yellow); color: var(--yellow-text); }
+    .chip-network { background: var(--secondary-container); color: var(--on-secondary-container); }
+    .chip-lux { background: var(--tertiary-container); color: var(--on-tertiary-container); }
+    .detail-actions { display: flex; gap: 8px; margin-top: 16px; align-items: center; }
+    .btn-maps {
+      flex: 1; min-width: 0; background: var(--green); color: white; border: none;
+      border-radius: 12px; padding: 12px 8px; font-size: 13px; font-weight: 500;
+      font-family: 'Roboto', sans-serif; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      white-space: nowrap; overflow: hidden;
+    }
+    .btn-maps svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .btn-icon {
+      width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+      background: none; border: 1px solid var(--card-border); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--on-surface);
+    }
+    .btn-icon.fav-active { border-color: #A84A42; color: #A84A42; }
+    .btn-icon svg { width: 22px; height: 22px; }
+    .suggest-link {
+      text-align: center; margin-top: 12px; font-size: 13px;
+      color: var(--green); cursor: pointer; text-decoration: underline;
+    }
+
+    /* Suggest change sheet */
+    #suggest-change-sheet { top: calc(var(--appbar-h, 110px) + 8px); max-height: none; display: flex; flex-direction: column; overflow: hidden; }
+    #suggest-new-sheet { top: calc(var(--appbar-h, 110px) + 4px); max-height: none; display: flex; flex-direction: column; overflow: hidden; }
+    .suggest-sheet-header {
+      flex-shrink: 0; padding: 0 20px 12px;
+      display: flex; align-items: flex-start; justify-content: space-between;
+    }
+    .suggest-sheet-header-text { flex: 1; }
+    .sheet-close-btn {
+      flex-shrink: 0; width: 32px; height: 32px; border-radius: 16px;
+      background: var(--surface-variant); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--on-surface); margin-top: 14px; margin-left: 8px;
+    }
+    .suggest-sheet-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 20px 16px; }
+    .sheet-title { font-size: 16px; font-weight: 700; margin: 16px 0 4px; }
+    .sheet-subtitle { font-size: 13px; color: var(--outline); margin-bottom: 16px; }
+    .form-group { margin-bottom: 12px; }
+    .form-label { font-size: 12px; font-weight: 500; color: var(--outline); margin-bottom: 4px; display: block; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: 10px 12px; border: 1px solid var(--card-border);
+      border-radius: 10px; font-size: 16px; font-family: 'Roboto', sans-serif;
+      background: var(--surface); color: var(--on-surface); outline: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--green); }
+    .form-input.invalid, .form-select.invalid, .form-textarea.invalid { border-color: #E53935; background: rgba(229,57,53,0.06); }
+    .form-input.invalid:focus, .form-select.invalid:focus { border-color: #E53935; }
+    .form-textarea { min-height: 80px; resize: vertical; }
+    .form-select { -webkit-appearance: none; appearance: none; }
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 0; font-size: 14px;
+    }
+    .toggle {
+      width: 44px; height: 26px; border-radius: 13px; border: none;
+      background: var(--chip-bg); cursor: pointer; position: relative;
+      transition: background 0.2s; flex-shrink: 0;
+    }
+    .toggle::after {
+      content: ''; position: absolute; top: 3px; left: 3px;
+      width: 20px; height: 20px; border-radius: 10px;
+      background: white; transition: left 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .toggle.on { background: var(--green); }
+    .toggle.on::after { left: 21px; }
+    .section-label { font-size: 13px; font-weight: 600; color: var(--green); margin: 16px 0 8px; letter-spacing: 0.3px; }
+    .btn-submit {
+      width: 100%; background: var(--green); color: white; border: none;
+      border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 500;
+      font-family: 'Roboto', sans-serif; cursor: pointer; margin-top: 16px;
+    }
+    .btn-submit:active { opacity: 0.85; }
+    .thank-you { text-align: center; padding: 24px 0; }
+    .thank-you svg { width: 64px; height: 64px; color: var(--green); }
+    .thank-you h2 { font-size: 22px; font-weight: 700; margin: 16px 0 8px; }
+    .thank-you p { color: var(--outline); margin-bottom: 24px; }
+
+    /* ── Nav bar ── */
+    #navbar {
+      position: fixed; left: 0; right: 0;
+      bottom: 0;
+      height: calc(var(--nav-height) + var(--safe-bottom));
+      padding-bottom: var(--safe-bottom);
+      background: var(--surface);
+      border-top: 1px solid var(--card-border);
+      display: flex; z-index: 1003;
+    }
+    .nav-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 3px; cursor: pointer; border: none;
+      background: none; color: var(--outline); font-size: 10px;
+      font-family: 'Roboto', sans-serif; font-weight: 500;
+      transition: color 0.15s; padding: 8px 0;
+    }
+    .nav-item svg { width: 24px; height: 24px; }
+    .nav-item { position: relative; }
+    .nav-item svg, .nav-item span { position: relative; z-index: 2; }
+    .nav-item.active { color: white; }
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; left: 0; right: 0;
+      background: #A84A42;
+      z-index: -1;
+    }
+    .nav-item .nav-icon-outline { display: block; }
+    .nav-item .nav-icon-filled { display: none; }
+    .nav-item.active .nav-icon-outline { display: none; }
+    .nav-item.active .nav-icon-filled { display: block; }
+
+    /* Map marker custom */
+    .marker-pin {
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .marker-circle {
+      width: 36px; height: 36px; border-radius: 18px;
+      background: var(--green); border: 2px solid white;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: all 0.2s;
+    }
+    .marker-circle.selected {
+      width: 48px; height: 48px; border-radius: 24px;
+      background: #A84A42; border: 3px solid white;
+      box-shadow: 0 0 12px rgba(168,74,66,0.5), 0 3px 6px rgba(0,0,0,0.2);
+    }
+    .marker-circle svg { color: white; }
+    .marker-badge {
+      background: var(--yellow); color: var(--yellow-text);
+      font-size: 10px; font-weight: 700; padding: 1px 5px;
+      border-radius: 6px; margin-top: 2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2); white-space: nowrap;
+    }
+    .user-dot {
+      width: 16px; height: 16px; border-radius: 8px;
+      background: #2196F3; border: 2.5px solid white;
+      box-shadow: 0 0 8px rgba(33,150,243,0.4);
+    }
+
+    /* Map store panel (bottom sheet style on map) */
+    #map-store-panel {
+      position: fixed; left: 0; right: 0;
+      bottom: calc(var(--nav-height) + var(--safe-bottom));
+      background: var(--surface);
+      border-radius: 20px 20px 0 0;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.15);
+      padding: 12px 20px 12px;
+      transform: translateY(100%);
+      transition: transform 0.28s cubic-bezier(0.25,0.46,0.45,0.94);
+      z-index: 1001;
+    }
+    #map-store-panel.open { transform: translateY(0); }
+    #map-panel-close {
+      background: none; border: none; cursor: pointer;
+      color: var(--outline); padding: 4px;
+    }
+    #map-panel-close svg { width: 20px; height: 20px; }
+
+    /* Spinner */
+    .spinner {
+      width: 20px; height: 20px; border-radius: 10px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: white; animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Info screen */
+    .info-section-header {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+      color: var(--green); padding: 4px 20px 6px;
+    }
+    .info-card {
+      background: var(--surface); border: 1px solid var(--card-border);
+      border-radius: 14px; margin: 2px 4px; overflow: hidden;
+    }
+    .info-text { font-size: 13px; color: var(--outline); line-height: 1.5; padding: 14px 16px; }
+    .info-link-tile {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; text-decoration: none; color: var(--on-surface);
+    }
+    .info-link-tile:active { background: var(--chip-bg); }
+    .info-link-icon {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .info-link-body { flex: 1; min-width: 0; }
+    .info-link-title { font-size: 14px; font-weight: 500; }
+    .info-link-sub { font-size: 12px; color: var(--outline); margin-top: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .info-chevron { width: 18px; height: 18px; color: var(--outline); flex-shrink: 0; }
+    .info-divider { border: none; border-top: 1px solid var(--card-border); margin: 0 16px; }
+
+    /* Snackbar */
+    #snackbar {
+      position: fixed; left: 50%; transform: translateX(-50%);
+      bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
+      background: #323232; color: white; padding: 10px 16px;
+      border-radius: 8px; font-size: 14px; z-index: 200;
+      opacity: 0; transition: opacity 0.2s; pointer-events: none;
+      white-space: nowrap; max-width: calc(100vw - 32px);
+    }
+    #snackbar.show { opacity: 1; }
+  </style>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Секонд-хенди Херсона",
+  "description": "Список секонд-хендів у місті Херсон: адреси, мережі, дні поповнення.",
+  "url": "https://bazasecond.com.ua/kherson/",
+  "numberOfItems": 22,
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "бульв. Мирний, 3",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6388515,
+          "longitude": 32.6131556
+        },
+        "hasMap": "https://maps.app.goo.gl/1DqK3ctu3fJRSwpd6"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "вул.  Іллюши Кулика, 114Ж",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6606851,
+          "longitude": 32.6375645
+        },
+        "hasMap": "https://maps.app.goo.gl/fmCiq4eSHzwaNm2D6"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "вул. 49-ї Гвардійської Дивізії",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6690932,
+          "longitude": 32.6188856
+        },
+        "hasMap": "https://maps.app.goo.gl/yvPNbHuWeqmFzj7L8"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "вул. 49-ї Гвардійської Дивізії, 22а",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6714979,
+          "longitude": 32.6173174
+        },
+        "hasMap": "https://maps.app.goo.gl/H93uArB7c6Rf58j37"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 5,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "вул. Гвардійська, 138",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.626593,
+          "longitude": 32.7400103
+        },
+        "hasMap": "https://maps.app.goo.gl/4zKzzGhGWiAerVSF7"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 6,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "вул. Іллюши Кулика, 33-Б",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6522151,
+          "longitude": 32.6126594
+        },
+        "hasMap": "https://maps.app.goo.gl/w6nt71Y2ARypEzih8"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 7,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "вул. Лавреньова, 17",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6483169,
+          "longitude": 32.5620587
+        },
+        "hasMap": "https://maps.app.goo.gl/AmKXA6Wkv4T6cgsJ9"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 8,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "вул. Маяковського, 16",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6399634,
+          "longitude": 32.6094778
+        },
+        "hasMap": "https://maps.app.goo.gl/N18eLpW1tnLxQTPw7"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 9,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "вул. Маяковського, 22",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6393119,
+          "longitude": 32.6085018
+        },
+        "hasMap": "https://maps.app.goo.gl/zTa1BVofgJBw7iSQ9"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 10,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "вул. Маяковського, 7",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.639456,
+          "longitude": 32.6087872
+        },
+        "hasMap": "https://maps.app.goo.gl/E7T2gFhv1bLjRQxu9"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 11,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "вул. Патона, 12",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6210473,
+          "longitude": 32.5824039
+        },
+        "hasMap": "https://maps.app.goo.gl/iDcJtw13YBPxv1zu7"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 12,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "вул. Перекопська, 168А",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6621721,
+          "longitude": 32.6603469
+        },
+        "hasMap": "https://maps.app.goo.gl/ffuAaHZcUSAB58fCA"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 13,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "вул. Рішельєвська, 38",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6369439,
+          "longitude": 32.6090506
+        },
+        "hasMap": "https://maps.app.goo.gl/DP9TTBXQNxuGoQPPA"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 14,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "вул. Стрітенська, 11Б",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6476702,
+          "longitude": 32.5878628
+        },
+        "hasMap": "https://maps.app.goo.gl/mLiQRPySuqjFqvCM9"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 15,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "вул. Університетська, 157",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.657684,
+          "longitude": 32.6456037
+        },
+        "hasMap": "https://maps.app.goo.gl/87s3JbPefNC2Jhpt8"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 16,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "вул. Університетська, 161",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6600546,
+          "longitude": 32.6484469
+        },
+        "hasMap": "https://maps.app.goo.gl/E6yMR1Z9jkQrthQH8"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 17,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "просп. 200-річчя Херсона, 9",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6656589,
+          "longitude": 32.6028886
+        },
+        "hasMap": "https://maps.app.goo.gl/vrTJxpXV9DFQFsZU6"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 18,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "просп. Будівельників, 19",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6508693,
+          "longitude": 32.5637477
+        },
+        "hasMap": "https://maps.app.goo.gl/jZavzSpuCNsRuWG89"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 19,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "просп. Святих Кирила і Мефодія, 9",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6431288,
+          "longitude": 32.5592595
+        },
+        "hasMap": "https://maps.app.goo.gl/7L421XLjpRgBzK488"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 20,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "просп. Ушакова, 57",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.644136,
+          "longitude": 32.6114179
+        },
+        "hasMap": "https://maps.app.goo.gl/TyiF98yUtTsGLV5g9"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 21,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "шосе Миколаївське, 15",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6501582,
+          "longitude": 32.597494
+        },
+        "hasMap": "https://maps.app.goo.gl/JTeXmMs4prJxsF28A"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 22,
+      "item": {
+        "@type": "LocalBusiness",
+        "name": "Секонд-хенд Херсон",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "шосе Миколаївське, 2",
+          "addressLocality": "Херсон",
+          "addressCountry": "UA"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 46.6511493,
+          "longitude": 32.5963242
+        },
+        "hasMap": "https://maps.app.goo.gl/8Z673rsJ9wmqFTtx9"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body data-city="Херсон">
+<div id="app">
+  <!-- AppBar -->
+  <div id="appbar">
+    <div id="appbar-top">
+      <h1 id="appbar-title">База секондів</h1>
+      <button id="suggest-new-btn" onclick="openSuggestNew()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Запропонувати секонд
+      </button>
+    </div>
+    <div id="filters">
+      <button class="filter-btn active" id="city-filter-btn" onclick="openFilter('city')">
+        <svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span id="city-label">Місто</span>
+        <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <button class="filter-btn" id="day-filter-btn" onclick="openFilter('day')">
+        <svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span id="day-label">Будь-який день</span>
+        <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div id="content">
+    <!-- List screen -->
+    <div id="list-screen" class="screen active">
+      <div id="sort-banner">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg>
+        Сортування: від найближчого
+        <button id="sort-banner-close" onclick="clearSort()">✕</button>
+      </div>
+      <div id="empty-state">Немає секондів у цей день</div>
+      <div id="list-content"></div>
+    </div>
+
+    <!-- Map screen -->
+    <div id="map-screen" class="screen">
+      <div id="map"></div>
+      <div id="osm-attribution">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors | <a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a></div>
+      <div id="map-count">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:var(--green)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+        <span id="map-count-num">0</span>
+      </div>
+      <div id="map-controls">
+        <button class="map-fab" id="suggest-map-fab" onclick="openSuggestNew()" title="Запропонувати секонд">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- store icon, shifted slightly left/down to leave room for + badge -->
+            <g transform="translate(1,3) scale(0.78)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 7l1-4h18l1 4"/>
+              <path d="M2 7c0 1.1.9 2 2 2s2-.9 2-2 .9 2 2 2 2-.9 2-2 .9 2 2 2 2-.9 2-2 .9 2 2 2 2-.9 2-2"/>
+              <rect x="4" y="9" width="16" height="12" rx="1"/>
+              <line x1="9" y1="9" x2="9" y2="21"/><line x1="15" y1="9" x2="15" y2="21"/>
+            </g>
+            <!-- + badge top-right -->
+            <circle cx="21" cy="7" r="6" fill="var(--surface)"/>
+            <line x1="21" y1="4" x2="21" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="18" y1="7" x2="24" y2="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button class="map-fab" id="location-fab" onclick="goToMyLocation()">
+          <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg>
+        </button>
+      </div>
+      <!-- Map store panel -->
+      <div id="map-store-panel">
+        <div class="sheet-handle" style="margin:0 auto 12px;"></div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div>
+            <div class="detail-city" id="panel-city"></div>
+            <div class="detail-address" id="panel-address"></div>
+          </div>
+          <button id="map-panel-close" onclick="closeMapPanel()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div id="panel-chips"></div>
+        <div class="detail-actions" style="margin-top:12px;">
+          <button class="btn-maps" id="panel-maps-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+            Google Maps
+          </button>
+          <button class="btn-icon" id="panel-fav-btn" onclick="togglePanelFav()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <button class="btn-icon" onclick="shareStore('panel')" title="Поширити">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          </button>
+          <button class="btn-icon" onclick="openSuggestChangesFromPanel()" title="Запропонувати зміни">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Favorites screen -->
+    <div id="favs-screen" class="screen">
+      <div id="favs-content">
+        <div id="favs-empty">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:12px;opacity:0.4;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <br>Тут будуть ваші обрані секонди
+        </div>
+      </div>
+    </div>
+
+    <!-- Info screen -->
+    <div id="info-screen" class="screen">
+      <div style="padding:12px 12px 24px;">
+        <div class="info-section-header">ПРО САЙТ</div>
+        <div class="info-card">
+          <p class="info-text">«База секондів України» — сайт для пошуку секонд-хендів в Україні.</p>
+          <p class="info-text" style="padding-top:0; font-weight:600;">Основні можливості та функціонал:</p>
+          <p class="info-text" style="padding-top:0;">• <strong>Пошук секонд-хендів на карті та у списку.</strong> Ви можете легко знайти найближчі секонди у своєму місті або переглянути список секонд-хендів по понад 20 містах країни.</p>
+          <p class="info-text" style="padding-top:0;">• <strong>Інформація про кожен магазин.</strong> Для кожної точки вказано точну адресу та день оновлення товару. В окремих моментах може бути згадано деталі про наявність та оновлення відділу «люкс» та назви мережі.</p>
+          <p class="info-text" style="padding-top:0;">• <strong>Поповнення інформації користувачами.</strong> Якщо ви знаєте магазин, якого ще немає у списку, помітили неточність або знаєте, як можете доповнити вже наявну інформацію, скористайтесь, будь ласка, кнопкою «Запропонувати секонд» або «Запропонувати зміни».</p>
+          <p class="info-text" style="padding-top:0;">Бажаємо вдалих пошуків!</p>
+        </div>
+        <div style="height:8px;"></div>
+        <div class="info-section-header">ПРО ДАНІ</div>
+        <div class="info-card">
+          <p class="info-text">Усі дані зібрано з відкритих джерел, а оновлюються вони завдяки пропозиціям користувачів. Незважаючи на зусилля, які вкладаються в підтримку актуальності даних, інформація, в окремих випадках, може не відповідати дійсності або бути застарілою.</p>
+        </div>
+        <div style="height:8px;"></div>
+        <div class="info-card">
+          <a class="info-link-tile" href="https://t.me/lvivsecondhand_bot" target="_blank">
+            <div class="info-link-icon" style="background:rgba(41,182,246,0.12);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#29B6F6"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
+            </div>
+            <div class="info-link-body">
+              <div class="info-link-title">Telegram-бот</div>
+              <div class="info-link-sub">@lvivsecondhand_bot</div>
+            </div>
+            <svg class="info-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+        <div style="height:8px;"></div>
+        <div class="info-section-header">КОНТАКТИ</div>
+        <div class="info-card">
+          <a class="info-link-tile" href="https://www.instagram.com/lvivsecondhand_bot/" target="_blank">
+            <div class="info-link-icon" style="background:rgba(225,48,108,0.12);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E1306C" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="#E1306C" stroke="none"/></svg>
+            </div>
+            <div class="info-link-body">
+              <div class="info-link-title">Instagram</div>
+              <div class="info-link-sub">@lvivsecondhand_bot</div>
+            </div>
+            <svg class="info-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+          <div class="info-divider"></div>
+          <a class="info-link-tile" href="mailto:sviatoslav.parashchak@gmail.com">
+            <div class="info-link-icon" style="background:rgba(45,106,79,0.12);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div class="info-link-body">
+              <div class="info-link-title">Електронна пошта</div>
+              <div class="info-link-sub">sviatoslav.parashchak@gmail.com</div>
+            </div>
+            <svg class="info-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+        <div style="height:8px;"></div>
+        <div class="info-section-header">КАРТА</div>
+        <div class="info-card">
+          <a class="info-link-tile" href="https://www.openstreetmap.org/copyright" target="_blank">
+            <div class="info-link-icon" style="background:rgba(124,179,66,0.12);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7CB342" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+            </div>
+            <div class="info-link-body">
+              <div class="info-link-title">OpenStreetMap</div>
+              <div class="info-link-sub">Дані карти © OpenStreetMap contributors</div>
+            </div>
+            <svg class="info-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+          <div class="info-divider"></div>
+          <a class="info-link-tile" href="https://leafletjs.com" target="_blank">
+            <div class="info-link-icon" style="background:rgba(32,136,54,0.12);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#208836" stroke-width="2"><path d="M12 2C8.5 2 5.5 4.5 5.5 8.5c0 5.25 6.5 11.5 6.5 11.5s6.5-6.25 6.5-11.5C18.5 4.5 15.5 2 12 2z"/><circle cx="12" cy="8.5" r="2.5"/></svg>
+            </div>
+            <div class="info-link-body">
+              <div class="info-link-title">Leaflet</div>
+              <div class="info-link-sub">Бібліотека для відображення карти</div>
+            </div>
+            <svg class="info-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+        <div style="height:8px;"></div>
+        <div class="info-card">
+          <a class="info-link-tile" href="#" onclick="openPrivacy(); return false;">
+            <div class="info-link-icon" style="background:rgba(45,106,79,0.12);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="info-link-body">
+              <div class="info-link-title">Політика конфіденційності</div>
+            </div>
+            <svg class="info-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy screen (overlay) -->
+  <div id="privacy-screen" style="display:none; position:fixed; inset:0; z-index:2000; background:var(--bg); overflow-y:auto; -webkit-overflow-scrolling:touch;">
+    <div style="position:sticky; top:0; z-index:1; background:var(--surface); border-bottom:1px solid var(--card-border); padding: calc(env(safe-area-inset-top,0px) + 12px) 16px 12px; display:flex; align-items:center; gap:8px;">
+      <button onclick="closePrivacy()" style="background:none; border:none; cursor:pointer; padding:4px; color:var(--on-surface); display:flex; align-items:center;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <span style="font-size:16px; font-weight:600;">Політика конфіденційності</span>
+    </div>
+    <div style="padding: 32px 20px 80px; max-width:680px; margin:0 auto; font-family:'Roboto',sans-serif; font-size:15px; line-height:1.7; color:var(--on-surface);">
+      <div id="privacy-content"></div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav id="navbar">
+    <button class="nav-item active" id="nav-list" onclick="switchTab('list')">
+      <!-- list_outlined (inactive) / list (active) -->
+      <svg class="nav-icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      <svg class="nav-icon-filled" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1.5" fill="currentColor" stroke="none"/><circle cx="3" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="3" cy="18" r="1.5" fill="currentColor" stroke="none"/></svg>
+      Список
+    </button>
+    <button class="nav-item" id="nav-map" onclick="switchTab('map')">
+      <!-- map_outlined (inactive) / map filled (active) -->
+      <svg class="nav-icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+      <svg class="nav-icon-filled" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+      Карта
+    </button>
+    <button class="nav-item" id="nav-favs" onclick="switchTab('favs')">
+      <!-- favorite_outline (inactive) / favorite filled (active) -->
+      <svg class="nav-icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <svg class="nav-icon-filled" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      Обрані
+    </button>
+    <button class="nav-item" id="nav-info" onclick="switchTab('info')">
+      <!-- info_outline (inactive) / info filled (active) -->
+      <svg class="nav-icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <svg class="nav-icon-filled" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+      Інфо
+    </button>
+  </nav>
+</div>
+
+<!-- Sheet Overlay -->
+<div id="sheet-overlay"></div>
+
+<!-- Filter Sheet -->
+<div class="bottom-sheet" id="filter-sheet">
+  <div class="sheet-handle"></div>
+  <div class="filter-sheet-header">
+    <span class="filter-sheet-title" id="filter-sheet-title">Фільтр</span>
+    <button class="sheet-close-btn" onclick="closeSheet('filter-sheet')" aria-label="Закрити">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="filter-list"></div>
+</div>
+
+<!-- Store Detail Sheet (from list) -->
+<div class="bottom-sheet" id="detail-sheet">
+  <div class="sheet-handle" style="margin:12px auto 0;"></div>
+  <div id="detail-map" style="display:none;">
+    <div id="detail-leaflet"></div>
+    <button id="detail-back" onclick="closeDetail()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+  </div>
+  <div id="detail-content" style="padding:0 20px 12px;">
+    <div class="detail-city" id="detail-city"></div>
+    <div class="detail-address" id="detail-address"></div>
+    <div id="detail-chips"></div>
+    <div class="detail-actions">
+      <button class="btn-maps" id="detail-maps-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+        Google Maps
+      </button>
+      <button class="btn-icon" id="detail-fav-btn" onclick="toggleDetailFav()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+      <button class="btn-icon" onclick="shareStore('detail')" title="Поширити">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+      </button>
+      <button class="btn-icon" onclick="openSuggestChanges()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Suggest Changes Sheet -->
+<div class="bottom-sheet" id="suggest-change-sheet">
+  <div class="sheet-handle" style="margin:12px auto 0; flex-shrink:0;"></div>
+  <div class="suggest-sheet-header">
+    <div class="suggest-sheet-header-text">
+      <div class="sheet-title" id="suggest-change-title">Запропонувати зміни</div>
+      <div class="sheet-subtitle" id="suggest-change-subtitle"></div>
+    </div>
+    <button class="sheet-close-btn" onclick="closeSheet('suggest-change-sheet')" aria-label="Закрити">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="suggest-change-content" class="suggest-sheet-scroll"></div>
+</div>
+
+<!-- Suggest New Store Sheet -->
+<div class="bottom-sheet" id="suggest-new-sheet">
+  <div class="sheet-handle" style="margin:12px auto 0; flex-shrink:0;"></div>
+  <div class="suggest-sheet-header">
+    <div class="suggest-sheet-header-text">
+      <div class="sheet-title">Запропонувати секонд</div>
+    </div>
+    <button class="sheet-close-btn" onclick="closeSheet('suggest-new-sheet')" aria-label="Закрити">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="suggest-new-content" class="suggest-sheet-scroll"></div>
+</div>
+
+<!-- Snackbar -->
+<div id="snackbar"></div>
+
+<!-- Suggest FAB (list screen) -->
+<button id="suggest-list-fab" class="hidden" onclick="openSuggestNew()">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l1-4h18l1 4"/><path d="M2 7c0 1.1.9 2 2 2s2-.9 2-2 .9 2 2 2 2-.9 2-2 .9 2 2 2 2-.9 2-2 .9 2 2 2 2-.9 2-2"/><rect x="4" y="9" width="16" height="12" rx="1"/><line x1="9" y1="9" x2="9" y2="21"/><line x1="15" y1="9" x2="15" y2="21"/></svg>
+  Додати
+</button>
+
+<!-- FAB -->
+<button id="near-me-fab" onclick="sortNearMe()">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg>
+  Найближчі
+</button>
+
+<script>
+// ── Constants ──────────────────────────────────────────────────────────────
+const DATA_URL = 'https://raw.githubusercontent.com/Sviatopol/secondhand-data/main/data/secondhands.json';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzs2r9j_MQaybr68_fmWT2kmm8b-8cU4s6GZwecvMoy_4AwO2zZ2l8mWZ5GqrXLAvrirQ/exec';
+const CACHE_KEY = 'sh_data';
+const CACHE_TIME_KEY = 'sh_time';
+const CACHE_VERSION_KEY = 'sh_version';
+const CACHE_TTL = 24 * 60 * 60 * 1000;
+const VERSION_URL = 'https://raw.githubusercontent.com/Sviatopol/secondhand-data/main/data/version.txt';
+const DAYS = ['Понеділок','Вівторок','Середа','Четвер',"П'ятниця",'Субота','Неділя'];
+const DAY_SHORT = {'Понеділок':'пн','Вівторок':'вт','Середа':'ср','Четвер':'чт',"П'ятниця":'пт','Субота':'сб','Неділя':'нд'};
+const NETWORKS = ['Humana','EconomClass','EUROMARKA','КАЛАМБУР','Баул','Тюк','Шмотка','Євро Секонд Хенд','БОМБА'];
+const CITIES = ['Львів','Івано-Франківськ','Тернопіль','Київ','Дніпро','Одеса','Харків','Рівне','Чернівці','Луцьк','Житомир','Хмельницький','Ужгород','Вінниця','Черкаси','Полтава','Чернігів','Суми','Кропивницький','Миколаїв','Херсон'];
+const CITY_CENTERS = {
+  'Львів':[49.8397,24.0297],'Київ':[50.4501,30.5234],'Харків':[49.9935,36.2304],
+  'Дніпро':[48.4647,35.0462],'Одеса':[46.4825,30.7233],'Рівне':[50.6199,26.2516],
+  'Тернопіль':[49.5535,25.5948],'Івано-Франківськ':[48.9226,24.7111],'Вінниця':[49.2331,28.4682],
+  'Хмельницький':[49.4229,26.9969],'Житомир':[50.2547,28.6587],'Чернівці':[48.2921,25.9358],
+  'Полтава':[49.5883,34.5514],'Суми':[50.9077,34.7981],'Миколаїв':[46.9750,31.9946],
+  'Черкаси':[49.4444,32.0598],'Кропивницький':[48.5132,32.2597],'Луцьк':[50.7472,25.3254],
+  'Ужгород':[48.6208,22.2879],'Чернігів':[51.4982,31.2893]
+};
+
+// ── State ──────────────────────────────────────────────────────────────────
+let allData = {};       // { city: [store, ...] }
+let currentCity = null;
+let currentDay = null;
+let sortByDistance = false;
+let userLat = null, userLng = null;
+let _locationPromise = null; // shared promise so only one geolocation request runs
+let favorites = new Set();
+let currentTab = 'list';
+let activeFilterType = null;
+let selectedStore = null;   // store open in detail sheet
+let panelStore = null;      // store open in map panel
+let detailMap = null;       // leaflet instance in detail sheet
+let mainMap = null;         // leaflet instance in map tab
+let markersLayer = null;    // L.LayerGroup for store markers
+let mapMarkers = {};        // address -> marker
+let mapSuggestStore = null;
+// Rate limit: max 3 submissions per 10 min
+const RATE_LIMIT_KEY = 'sh_submit_times';
+
+// ── City name mapping ──────────────────────────────────────────────────────
+const CITY_NAMES = {
+  lviv:'Львів',kyiv:'Київ',kharkiv:'Харків',dnipro:'Дніпро',odesa:'Одеса',odessa:'Одеса',
+  rivne:'Рівне',ternopil:'Тернопіль','if':'Івано-Франківськ',ivano_frankivsk:'Івано-Франківськ',
+  vinnytsia:'Вінниця',vinnitsa:'Вінниця',khmelnytskyi:'Хмельницький',khmelnitsky:'Хмельницький',
+  zhytomyr:'Житомир',chernivtsi:'Чернівці',poltava:'Полтава',sumy:'Суми',mykolaiv:'Миколаїв',
+  nikolaev:'Миколаїв',cherkasy:'Черкаси',kropyvnytskyi:'Кропивницький',lutsk:'Луцьк',
+  uzhhorod:'Ужгород',uzhgorod:'Ужгород',chernihiv:'Чернігів',kherson:'Херсон',
+  Lviv:'Львів',Kyiv:'Київ',Kharkiv:'Харків',Dnipro:'Дніпро',Odessa:'Одеса',Rivne:'Рівне',
+  Ternopil:'Тернопіль',Ivano_Frankivsk:'Івано-Франківськ',Vinnytsia:'Вінниця',
+  Khmelnytskyi:'Хмельницький',Zhytomyr:'Житомир',Chernivtsi:'Чернівці',Poltava:'Полтава',
+  Sumy:'Суми',Mykolaiv:'Миколаїв',Cherkasy:'Черкаси',Kropyvnytskyi:'Кропивницький',
+  Lutsk:'Луцьк',Uzhhorod:'Ужгород',Chernihiv:'Чернігів',
+};
+function cityName(k) { return CITY_NAMES[k] || k; }
+
+// ── Init ──────────────────────────────────────────────────────────────────
+function updateAppbarHeight() {
+  const h = document.getElementById('appbar')?.offsetHeight || 110;
+  document.documentElement.style.setProperty('--appbar-h', h + 'px');
+}
+
+(async function init() {
+  // Measure appbar height and expose as CSS var for sheet max-height
+  updateAppbarHeight();
+  window.addEventListener('resize', updateAppbarHeight);
+
+  // Overlay closes sheets on tap/click outside (use click, not mousedown,
+  // so item clicks inside the sheet register first)
+  const overlay = document.getElementById('sheet-overlay');
+  overlay.addEventListener('click', closeAllSheets);
+
+  // Prevent clicks inside any sheet from bubbling to overlay
+  document.querySelectorAll('.bottom-sheet').forEach(sheet => {
+    sheet.addEventListener('click', e => e.stopPropagation());
+  });
+
+  loadFavorites();
+  loadTodayFilter();
+  loadSavedCity();
+  await loadData();
+  injectJsonLd();
+  await autoSelectCity();
+  initMainMap();
+  renderList();
+  renderFavs();
+  tryGetLocation();
+  switchTab('map');
+})();
+
+function injectJsonLd() {
+  const stores = Object.entries(allData).flatMap(([city, list]) =>
+    list.map(s => ({
+      "@type": "LocalBusiness",
+      "name": s.network ? s.network + ' (' + city + ')' : 'Секонд-хенд ' + city,
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": s.address,
+        "addressLocality": city,
+        "addressCountry": "UA"
+      },
+      ...(s.lat && s.lng ? { "geo": { "@type": "GeoCoordinates", "latitude": s.lat, "longitude": s.lng } } : {}),
+      ...(s.mapsUrl ? { "hasMap": s.mapsUrl } : {})
+    }))
+  );
+  if (!stores.length) return;
+  const ld = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Секонд-хенди України",
+    "description": "Список секонд-хендів у містах України: адреси, мережі, дні поповнення.",
+    "url": "https://bazasecond.com.ua/",
+    "numberOfItems": stores.length,
+    "itemListElement": stores.map((s, i) => ({
+      "@type": "ListItem",
+      "position": i + 1,
+      "item": s
+    }))
+  };
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.textContent = JSON.stringify(ld);
+  document.head.appendChild(script);
+}
+
+function loadTodayFilter() {
+  const wd = new Date().getDay(); // 0=sun
+  const idx = wd === 0 ? 6 : wd - 1;
+  currentDay = DAYS[idx];
+  updateDayFilterUI();
+}
+
+function loadSavedCity() {
+  const saved = localStorage.getItem('sh_city');
+  if (saved === '__all__') { currentCity = null; updateCityFilterUI(); }
+  else if (saved) { currentCity = saved; updateCityFilterUI(); }
+}
+
+function loadFavorites() {
+  try { favorites = new Set(JSON.parse(localStorage.getItem('sh_favs') || '[]')); } catch(e) {}
+}
+function saveFavorites() {
+  localStorage.setItem('sh_favs', JSON.stringify([...favorites]));
+}
+function favKey(city, address) { return `${city}|${address}`; }
+
+// ── Data loading ──────────────────────────────────────────────────────────
+async function loadData() {
+  const cached = localStorage.getItem(CACHE_KEY);
+  const cTime = parseInt(localStorage.getItem(CACHE_TIME_KEY) || '0');
+  const cachedVersion = localStorage.getItem(CACHE_VERSION_KEY) || '';
+
+  // If cache exists and is fresh — check version first (lightweight request)
+  if (cached && Date.now() - cTime < CACHE_TTL) {
+    try {
+      const vResp = await fetch(VERSION_URL + '?t=' + Date.now());
+      const remoteVersion = (await vResp.text()).trim();
+      if (remoteVersion === cachedVersion) {
+        // Same version — use cache
+        allData = parseData(JSON.parse(cached));
+        return;
+      }
+      // Version changed — fall through to fetch fresh data
+    } catch(e) {
+      // No internet — use cache
+      try { allData = parseData(JSON.parse(cached)); } catch(e2) {}
+      return;
+    }
+  }
+
+  // Fetch fresh data
+  try {
+    const [dataResp, vResp] = await Promise.all([
+      fetch(DATA_URL),
+      fetch(VERSION_URL + '?t=' + Date.now()),
+    ]);
+    const raw = await dataResp.json();
+    const newVersion = (await vResp.text()).trim();
+    localStorage.setItem(CACHE_KEY, JSON.stringify(raw));
+    localStorage.setItem(CACHE_TIME_KEY, String(Date.now()));
+    localStorage.setItem(CACHE_VERSION_KEY, newVersion);
+    allData = parseData(raw);
+  } catch(e) {
+    // Fallback to cache if available
+    try {
+      if (cached) { allData = parseData(JSON.parse(cached)); }
+    } catch(e2) {}
+  }
+}
+
+function parseData(raw) {
+  const result = {};
+  for (const [k, stores] of Object.entries(raw)) {
+    const name = cityName(k);
+    if (!result[name]) result[name] = [];
+    for (const s of stores) {
+      result[name].push({
+        address: s.address || '',
+        mapsUrl: s.maps_url || '',
+        updateDay: (s.update_day || '').replace(/ʼ/g, "'"),
+        updateNote: s.update_note || '',
+        lat: parseFloat(s.lat) || 0,
+        lng: parseFloat(s.lng) || 0,
+        network: s.network || '',
+        hours: s.hours || '',
+        luxDay: s.lux_day || '',
+        city: name,
+        get hasCoords() { return this.lat !== 0 && this.lng !== 0; },
+        get dayLabel() { return this.updateNote ? `${this.updateDay} (${this.updateNote})` : this.updateDay; },
+      });
+    }
+    if (result[name].length === 0) delete result[name];
+  }
+  return result;
+}
+
+function findNearestCity(lat, lng) {
+  let nearest = null;
+  let minDist = Infinity;
+  for (const [city, [cLat, cLng]] of Object.entries(CITY_CENTERS)) {
+    if (!allData[city]) continue;
+    const R = 6371000;
+    const dLat = (cLat - lat) * Math.PI / 180;
+    const dLng = (cLng - lng) * Math.PI / 180;
+    const a = Math.sin(dLat/2)**2 + Math.cos(lat*Math.PI/180)*Math.cos(cLat*Math.PI/180)*Math.sin(dLng/2)**2;
+    const d = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    if (d < minDist) { minDist = d; nearest = city; }
+  }
+  return minDist < 50000 ? nearest : null;
+}
+
+async function autoSelectCity() {
+  // Міська сторінка — data-city на <body>
+  const bodyCity = document.body.dataset.city;
+  if (bodyCity && allData[bodyCity]) {
+    currentCity = bodyCity;
+    localStorage.setItem('sh_city', bodyCity);
+    updateCityFilterUI();
+    return;
+  }
+
+  // Є збережений вибір — поважаємо його
+  const saved = localStorage.getItem('sh_city');
+  if (saved) return;
+
+  // Немає збереженого — питаємо геолокацію
+  if (navigator.geolocation) {
+    const pos = await new Promise(resolve => {
+      navigator.geolocation.getCurrentPosition(
+        p => resolve(p),
+        () => resolve(null),
+        { timeout: 8000, maximumAge: 300000, enableHighAccuracy: false }
+      );
+    });
+    if (pos) {
+      const nearest = findNearestCity(pos.coords.latitude, pos.coords.longitude);
+      if (nearest) {
+        currentCity = nearest;
+        localStorage.setItem('sh_city', nearest);
+        updateCityFilterUI();
+        return;
+      }
+    }
+  }
+
+  // Фолбек — вся Україна
+  currentCity = null;
+  localStorage.setItem('sh_city', '__all__');
+  updateCityFilterUI();
+}
+
+// ── Location ───────────────────────────────────────────────────────────────
+// Returns promise<{lat,lng}|null>. Runs only one real request at a time.
+function getLocation() {
+  if (userLat !== null) return Promise.resolve({ lat: userLat, lng: userLng });
+  if (_locationPromise) return _locationPromise;
+  if (!navigator.geolocation) return Promise.resolve(null);
+  _locationPromise = new Promise(resolve => {
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        userLat = pos.coords.latitude;
+        userLng = pos.coords.longitude;
+        _locationPromise = null;
+        resolve({ lat: userLat, lng: userLng });
+      },
+      () => { _locationPromise = null; resolve(null); },
+      { timeout: 10000, maximumAge: 300000, enableHighAccuracy: false }
+    );
+  });
+  return _locationPromise;
+}
+
+function tryGetLocation() {
+  getLocation().then(pos => { if (pos && sortByDistance) renderList(); });
+}
+
+function distanceTo(store) {
+  if (userLat === null || !store.hasCoords) return null;
+  const R = 6371000;
+  const dLat = (store.lat - userLat) * Math.PI / 180;
+  const dLng = (store.lng - userLng) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(userLat*Math.PI/180)*Math.cos(store.lat*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function formatDist(m) {
+  return m < 1000 ? `${Math.round(m)} м` : `${(m/1000).toFixed(1)} км`;
+}
+
+async function sortNearMe() {
+  const fab = document.getElementById('near-me-fab');
+  if (sortByDistance) { clearSort(); return; }
+  const origHtml = fab.innerHTML;
+  fab.innerHTML = '<div class="spinner"></div> Визначаємо...';
+  fab.disabled = true;
+  const pos = await getLocation();
+  fab.innerHTML = origHtml;
+  fab.disabled = false;
+  if (!pos) { showSnackbar('Не вдалось визначити місцезнаходження'); return; }
+  sortByDistance = true;
+  fab.classList.add('active');
+  document.getElementById('sort-banner').classList.add('visible');
+  renderList();
+}
+
+function clearSort() {
+  sortByDistance = false;
+  document.getElementById('near-me-fab').classList.remove('active');
+  document.getElementById('sort-banner').classList.remove('visible');
+  renderList();
+}
+
+// ── Filters ────────────────────────────────────────────────────────────────
+function openFilter(type) {
+  activeFilterType = type;
+  document.getElementById('filter-sheet-title').textContent = type === 'city' ? 'Місто' : 'День оновлення';
+  const list = document.getElementById('filter-list');
+  list.innerHTML = '';
+
+  if (type === 'city') {
+    const allCount = Object.values(allData).reduce((s, a) => s + a.length, 0);
+    const allItem = document.createElement('div');
+    allItem.className = 'filter-item' + (currentCity === null ? ' selected' : '');
+    allItem.innerHTML = `<span class="fi-label">Вся Україна</span><span class="fi-count">${allCount}</span><svg class="fi-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+    allItem.addEventListener('click', () => {
+      currentCity = null;
+      localStorage.setItem('sh_city', '__all__');
+      closeAllSheets();
+      updateCityFilterUI();
+      renderList();
+      renderMap();
+    });
+    list.appendChild(allItem);
+    const hr0 = document.createElement('hr'); hr0.className = 'filter-divider';
+    list.appendChild(hr0);
+
+    const cities = Object.keys(allData).sort();
+    cities.forEach(city => {
+      const count = allData[city]?.length || 0;
+      const item = document.createElement('div');
+      item.className = 'filter-item' + (city === currentCity ? ' selected' : '');
+      item.innerHTML = `<span class="fi-label">${city}</span><span class="fi-count">${count}</span><svg class="fi-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+      item.addEventListener('click', () => {
+        currentCity = city;
+        localStorage.setItem('sh_city', city);
+        closeAllSheets();
+        updateCityFilterUI();
+        renderList();
+        renderMap();
+      });
+      list.appendChild(item);
+    });
+  } else {
+    // "All days" option
+    const all = document.createElement('div');
+    all.className = 'filter-item' + (currentDay === null ? ' selected' : '');
+    all.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span class="fi-label">Будь-який день</span><svg class="fi-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+    all.addEventListener('click', () => {
+      currentDay = null;
+      closeAllSheets();
+      updateDayFilterUI();
+      renderList();
+      renderMap();
+    });
+    list.appendChild(all);
+    const hr = document.createElement('hr'); hr.className = 'filter-divider';
+    list.appendChild(hr);
+    DAYS.forEach(day => {
+      const item = document.createElement('div');
+      item.className = 'filter-item' + (day === currentDay ? ' selected' : '');
+      item.innerHTML = `<span class="fi-label">${day}</span><svg class="fi-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+      item.addEventListener('click', () => {
+        currentDay = day;
+        closeAllSheets();
+        updateDayFilterUI();
+        renderList();
+        renderMap();
+      });
+      list.appendChild(item);
+    });
+  }
+
+  openSheet('filter-sheet');
+}
+
+function updateCityFilterUI() {
+  const btn = document.getElementById('city-filter-btn');
+  const lbl = document.getElementById('city-label');
+  lbl.textContent = currentCity || 'Вся Україна';
+  btn.classList.toggle('active', true);
+}
+function updateDayFilterUI() {
+  const btn = document.getElementById('day-filter-btn');
+  const lbl = document.getElementById('day-label');
+  lbl.textContent = currentDay || 'Будь-який день';
+  btn.classList.toggle('active', !!currentDay);
+}
+
+// ── Tabs ───────────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  ['list','map','favs','info'].forEach(t => {
+    const screen = document.getElementById(`${t}-screen`);
+    const navBtn = document.getElementById(`nav-${t}`);
+    if (screen) screen.classList.toggle('active', t === tab);
+    if (navBtn) navBtn.classList.toggle('active', t === tab);
+  });
+  // Transparent appbar overlay on map screen
+  document.getElementById('app').classList.toggle('map-active', tab === 'map');
+  document.getElementById('app').classList.toggle('list-active', tab === 'list');
+  // FAB: visible on list tab only
+  document.getElementById('near-me-fab').classList.toggle('hidden', tab !== 'list');
+  // Filters: visible only on list + map
+  document.getElementById('filters').style.display = (tab === 'list' || tab === 'map') ? 'flex' : 'none';
+  // AppBar: hide title row on list too (title gone), show only on favs/info
+  const titles = { list: 'База секондів', map: 'Карта', favs: 'Обрані', info: 'Інфо' };
+  document.getElementById('appbar-title').textContent = titles[tab];
+  document.getElementById('appbar-top').style.display = (tab === 'favs' || tab === 'info') ? 'flex' : 'none';
+  document.getElementById('suggest-new-btn').style.display = 'none';
+  // Suggest FAB on map (bottom-right)
+  const suggestMapFab = document.getElementById('suggest-map-fab');
+  if (suggestMapFab) suggestMapFab.style.display = tab === 'map' ? 'flex' : 'none';
+  // Suggest FAB on list (bottom-right, above near-me)
+  document.getElementById('suggest-list-fab').classList.toggle('hidden', tab !== 'list');
+  // Recalculate appbar height after layout shift
+  setTimeout(updateAppbarHeight, 50);
+  if (tab === 'map') { setTimeout(() => mainMap && mainMap.invalidateSize(), 100); renderMap(); }
+  if (tab === 'favs') renderFavs();
+}
+
+// Перехід з списку/обраних на карту з фокусом на магазині (як onStoreTap у Flutter)
+function goToStoreOnMap(store) {
+  switchTab('map');
+  // Чекаємо поки карта ініціалізується і маркери відрендеряться
+  setTimeout(() => {
+    if (store.hasCoords) {
+      mainMap.setView([store.lat, store.lng], 16);
+    }
+    selectMapStore(store);
+  }, 150);
+}
+
+// ── List rendering ─────────────────────────────────────────────────────────
+function getFilteredStores() {
+  let stores = currentCity ? (allData[currentCity] || []) : Object.values(allData).flat();
+  if (currentDay) stores = stores.filter(s => s.updateDay === currentDay);
+  if (sortByDistance && userLat !== null) {
+    stores = [...stores].sort((a, b) => {
+      const da = distanceTo(a), db = distanceTo(b);
+      if (da === null && db === null) return 0;
+      if (da === null) return 1; if (db === null) return -1;
+      return da - db;
+    });
+  }
+  return stores;
+}
+
+function renderList() {
+  const stores = getFilteredStores();
+  const container = document.getElementById('list-content');
+  const empty = document.getElementById('empty-state');
+  container.innerHTML = '';
+  empty.style.display = stores.length === 0 ? 'block' : 'none';
+  stores.forEach(store => {
+    const fk = favKey(store.city, store.address);
+    const isFav = favorites.has(fk);
+    const dist = distanceTo(store);
+    const card = document.createElement('div');
+    card.className = 'store-card';
+    card.innerHTML = `
+      <div class="store-icon">${iconStore()}</div>
+      <div class="store-info">
+        <div class="store-address">${esc(store.address)}</div>
+        <div class="store-meta">
+          <div class="day-chip">${iconCalSmall()} ${esc(store.dayLabel)}</div>
+          ${dist !== null ? `<div class="dist-label">${iconNearMe()} ${esc(formatDist(dist))}</div>` : ''}
+        </div>
+      </div>
+      <button class="fav-btn ${isFav ? 'active' : ''}" data-fk="${fk}" onclick="event.stopPropagation();toggleFav('${fk}',this)">
+        ${isFav ? iconFavFill() : iconFavOutline()}
+      </button>`;
+    card.addEventListener('click', () => goToStoreOnMap(store));
+    container.appendChild(card);
+  });
+}
+
+function renderFavs() {
+  const container = document.getElementById('favs-content');
+  const empty = document.getElementById('favs-empty');
+  container.innerHTML = '';
+  const favStores = [];
+  Object.values(allData).flat().forEach(s => {
+    if (favorites.has(favKey(s.city, s.address))) favStores.push(s);
+  });
+  if (favStores.length === 0) { container.appendChild(empty); return; }
+  favStores.forEach(store => {
+    const fk = favKey(store.city, store.address);
+    const card = document.createElement('div');
+    card.className = 'store-card';
+    card.innerHTML = `
+      <div class="store-icon">${iconStore()}</div>
+      <div class="store-info">
+        <div class="store-address" style="font-size:12px;color:var(--green);font-weight:600;">${esc(store.city)}</div>
+        <div class="store-address">${esc(store.address)}</div>
+        <div class="store-meta"><div class="day-chip">${iconCalSmall()} ${esc(store.dayLabel)}</div></div>
+      </div>
+      <button class="fav-btn active" onclick="event.stopPropagation();toggleFav('${fk}',this);renderFavs();">${iconFavFill()}</button>`;
+    card.addEventListener('click', () => goToStoreOnMap(store));
+    container.appendChild(card);
+  });
+}
+
+function toggleFav(fk, btn) {
+  if (favorites.has(fk)) { favorites.delete(fk); btn.classList.remove('active'); btn.innerHTML = iconFavOutline(); }
+  else { favorites.add(fk); btn.classList.add('active'); btn.innerHTML = iconFavFill(); }
+  saveFavorites();
+  if (currentTab === 'favs') renderFavs();
+  // update detail/panel fav btn
+  updateDetailFavBtn();
+  updatePanelFavBtn();
+}
+
+// ── Detail sheet ──────────────────────────────────────────────────────────
+function openDetail(store) {
+  selectedStore = store;
+  document.getElementById('detail-city').textContent = store.city;
+  document.getElementById('detail-address').textContent = store.address;
+  renderChips(store, 'detail-chips');
+  const fk = favKey(store.city, store.address);
+  updateDetailFavBtn();
+  // Maps button
+  const mapsBtn = document.getElementById('detail-maps-btn');
+  if (store.mapsUrl) { mapsBtn.onclick = () => window.open(store.mapsUrl, '_blank'); }
+  else if (store.hasCoords) { mapsBtn.onclick = () => window.open(`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`, '_blank'); }
+  // Mini map
+  const mapDiv = document.getElementById('detail-map');
+  if (store.hasCoords) {
+    mapDiv.style.display = 'block';
+    if (detailMap) { detailMap.remove(); detailMap = null; }
+    setTimeout(() => {
+      detailMap = L.map('detail-leaflet', { zoomControl: false, attributionControl: false }).setView([store.lat, store.lng], 15);
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(detailMap);
+      L.marker([store.lat, store.lng], { icon: createIcon(true) }).addTo(detailMap);
+    }, 50);
+  } else { mapDiv.style.display = 'none'; }
+  openSheet('detail-sheet');
+}
+
+function closeDetail() { closeSheet('detail-sheet'); }
+
+function updateDetailFavBtn() {
+  if (!selectedStore) return;
+  const btn = document.getElementById('detail-fav-btn');
+  const fk = favKey(selectedStore.city, selectedStore.address);
+  const isFav = favorites.has(fk);
+  btn.classList.toggle('fav-active', isFav);
+  btn.innerHTML = isFav ? iconFavFill() : iconFavOutline();
+}
+
+function toggleDetailFav() {
+  if (!selectedStore) return;
+  const fk = favKey(selectedStore.city, selectedStore.address);
+  if (favorites.has(fk)) favorites.delete(fk); else favorites.add(fk);
+  saveFavorites(); renderList();
+  updateDetailFavBtn();
+}
+
+// ── Map ────────────────────────────────────────────────────────────────────
+function initMainMap() {
+  const center = currentCity && CITY_CENTERS[currentCity] ? CITY_CENTERS[currentCity] : [49.0, 31.0];
+  const zoom = currentCity ? 13 : 6;
+  mainMap = L.map('map', { zoomControl: false, attributionControl: false }).setView(center, zoom);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mainMap);
+  markersLayer = L.layerGroup().addTo(mainMap);
+  mainMap.on('click', () => closeMapPanel());
+}
+
+function renderMap() {
+  if (!mainMap) return;
+  // Clear markers
+  markersLayer.clearLayers();
+  mapMarkers = {};
+  let stores = Object.values(allData).flat();
+  if (currentCity) stores = allData[currentCity] || [];
+  if (currentDay) stores = stores.filter(s => s.updateDay === currentDay);
+  const visible = stores.filter(s => s.hasCoords);
+  document.getElementById('map-count-num').textContent = visible.length;
+  visible.forEach(store => {
+    const mk = L.marker([store.lat, store.lng], { icon: createIcon(false, store) })
+      .addTo(markersLayer)
+      .on('click', e => { L.DomEvent.stopPropagation(e); selectMapStore(store); });
+    mapMarkers[favKey(store.city, store.address)] = mk;
+  });
+  if (currentCity && CITY_CENTERS[currentCity]) {
+    mainMap.setView(CITY_CENTERS[currentCity], 13);
+  } else if (!currentCity) {
+    mainMap.setView([49.0, 31.0], 6);
+  }
+}
+
+function createIcon(selected, store) {
+  const size = selected ? 48 : 36;
+  const badge = store && store.updateDay && !selected ? `<div style="margin-top:2px;background:#F0C040;color:#1A1A00;font-size:10px;font-weight:700;padding:1px 5px;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.2);white-space:nowrap;">${DAY_SHORT[store.updateDay]||''}</div>` : '';
+  const color = selected ? '#A84A42' : '#2D6A4F';
+  const html = `<div style="display:flex;flex-direction:column;align-items:center;"><div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};border:${selected?3:2}px solid white;display:flex;align-items:center;justify-content:center;box-shadow:0 ${selected?'0 12px rgba(168,74,66,.5),0 3px 6px':'2px 4px'} rgba(0,0,0,.2);"><svg width="${selected?24:18}" height="${selected?24:18}" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>${badge}</div>`;
+  return L.divIcon({ html, className: '', iconSize: [selected?52:40, selected?52:54], iconAnchor: [selected?26:20, selected?26:20] });
+}
+
+function selectMapStore(store) {
+  panelStore = store;
+  // update marker icons
+  Object.entries(mapMarkers).forEach(([k, m]) => {
+    const s = Object.values(allData).flat().find(x => favKey(x.city, x.address) === k);
+    if (s) m.setIcon(createIcon(s === store, s));
+  });
+  document.getElementById('panel-city').textContent = store.city;
+  document.getElementById('panel-address').textContent = store.address;
+  renderChips(store, 'panel-chips');
+  updatePanelFavBtn();
+  document.getElementById('panel-maps-btn').onclick = () => {
+    if (store.mapsUrl) window.open(store.mapsUrl, '_blank');
+    else if (store.hasCoords) window.open(`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`, '_blank');
+  };
+  document.getElementById('map-store-panel').classList.add('open');
+  mainMap.panTo([store.lat, store.lng]);
+}
+
+function closeMapPanel() {
+  panelStore = null;
+  document.getElementById('map-store-panel').classList.remove('open');
+  // reset all markers
+  const stores = (currentCity ? allData[currentCity] : Object.values(allData).flat()) || [];
+  stores.filter(s => s.hasCoords).forEach(s => {
+    const mk = mapMarkers[favKey(s.city, s.address)];
+    if (mk) mk.setIcon(createIcon(false, s));
+  });
+}
+
+function updatePanelFavBtn() {
+  if (!panelStore) return;
+  const btn = document.getElementById('panel-fav-btn');
+  const fk = favKey(panelStore.city, panelStore.address);
+  const isFav = favorites.has(fk);
+  btn.classList.toggle('fav-active', isFav);
+  btn.innerHTML = isFav ? iconFavFill() : iconFavOutline();
+}
+
+function togglePanelFav() {
+  if (!panelStore) return;
+  const fk = favKey(panelStore.city, panelStore.address);
+  if (favorites.has(fk)) favorites.delete(fk); else favorites.add(fk);
+  saveFavorites(); renderList();
+  updatePanelFavBtn();
+}
+
+function openSuggestChangesFromPanel() {
+  if (!panelStore) return;
+  mapSuggestStore = panelStore;
+  openSuggestChangesSheet(panelStore);
+}
+
+// Geolocation for map
+async function goToMyLocation() {
+  const pos = await getLocation();
+  if (!pos) { showSnackbar('Не вдалось визначити місцезнаходження'); return; }
+  mainMap.setView([pos.lat, pos.lng], 14);
+  if (window._userDot) mainMap.removeLayer(window._userDot);
+  window._userDot = L.marker([pos.lat, pos.lng], { icon: L.divIcon({ html: '<div style="width:16px;height:16px;border-radius:8px;background:#2196F3;border:2.5px solid white;box-shadow:0 0 8px rgba(33,150,243,.4);"></div>', className: '', iconSize: [16,16], iconAnchor: [8,8] }) }).addTo(mainMap);
+}
+
+// ── Suggest Changes ────────────────────────────────────────────────────────
+function openSuggestChanges() {
+  if (!selectedStore) return;
+  openSuggestChangesSheet(selectedStore);
+}
+
+function openSuggestChangesSheet(store) {
+  document.getElementById('suggest-change-subtitle').textContent = store.address;
+  const content = document.getElementById('suggest-change-content');
+  content.innerHTML = buildChangeForm(store);
+  openSheet('suggest-change-sheet');
+}
+
+function buildChangeForm(store) {
+  return `
+    <div class="toggle-row">
+      <span>Секонд закрився</span>
+      <button class="toggle" id="closed-toggle" onclick="toggleClosed(this)"></button>
+    </div>
+    <div id="change-extra">
+      <div class="form-group">
+        <label class="form-label">Мережа</label>
+        <select class="form-select" id="ch-network" onchange="handleNetworkChange(this,'ch-custom-wrap')">
+          <option value="">— не вказано —</option>
+          ${NETWORKS.map(n=>`<option value="${esc(n)}" ${n===store.network?'selected':''}>${esc(n)}</option>`).join('')}
+          <option value="__custom__">Інше...</option>
+        </select>
+      </div>
+      <div id="ch-custom-wrap" style="display:none;" class="form-group">
+        <label class="form-label">Назва мережі</label>
+        <input class="form-input" id="ch-custom-network" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">День оновлення</label>
+        <select class="form-select" id="ch-day">
+          <option value="">— не вказано —</option>
+          ${DAYS.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Оновлення відділу люкс</label>
+        <select class="form-select" id="ch-lux">
+          <option value="">— не вказано —</option>
+          ${DAYS.map(d=>`<option value="${esc(d)}" ${d===store.luxDay?'selected':''}>${esc(d)}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Коментар (необов'язково)</label>
+      <textarea class="form-textarea" id="ch-comment" placeholder="Будь-яка додаткова інформація"></textarea>
+    </div>
+    <button class="btn-submit" onclick="submitChange('${esc(store.city)}','${esc(store.address)}')">Надіслати</button>
+    <input type="text" style="display:none;" id="ch-honeypot" tabindex="-1" autocomplete="off" />
+  `;
+}
+
+function toggleClosed(btn) {
+  btn.classList.toggle('on');
+  document.getElementById('change-extra').style.display = btn.classList.contains('on') ? 'none' : 'block';
+}
+
+function handleNetworkChange(sel, wrapId) {
+  document.getElementById(wrapId).style.display = sel.value === '__custom__' ? 'block' : 'none';
+}
+
+function submitChange(city, address) {
+  if (!checkRateLimit()) { showSnackbar('Забагато заявок. Спробуйте пізніше.'); return; }
+  if (document.getElementById('ch-honeypot')?.value) return; // bot trap
+  const isClosed = document.getElementById('closed-toggle').classList.contains('on');
+  const rawNetwork = document.getElementById('ch-network')?.value || '';
+  const network = isClosed ? '' : (rawNetwork === '__custom__' ? (document.getElementById('ch-custom-network')?.value?.trim() || '') : rawNetwork);
+  const day = isClosed ? '' : (document.getElementById('ch-day')?.value || '');
+  const lux = isClosed ? '' : (document.getElementById('ch-lux')?.value || '');
+  const comment = document.getElementById('ch-comment')?.value?.trim() || '';
+  fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({ type:'change', city, address, network, hours:'', lux_day:lux, update_day:day, is_closed: isClosed?'так':'ні', comment }) }).catch(()=>{});
+  recordSubmit();
+  document.getElementById('suggest-change-subtitle').textContent = '';
+  document.getElementById('suggest-change-title').textContent = '';
+  document.getElementById('suggest-change-content').innerHTML = thankYouHtml(() => closeSheet('suggest-change-sheet'));
+}
+
+// ── Suggest New ────────────────────────────────────────────────────────────
+function openSuggestNew() {
+  const content = document.getElementById('suggest-new-content');
+  content.innerHTML = buildNewForm();
+  openSheet('suggest-new-sheet');
+}
+
+function buildNewForm() {
+  return `
+    <div class="section-label">Основна інформація</div>
+    <div class="form-group">
+      <label class="form-label">Місто *</label>
+      <select class="form-select" id="new-city" onchange="handleCityChange(this)">
+        <option value="">Оберіть місто</option>
+        ${CITIES.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')}
+        <option value="__custom__">Інше...</option>
+      </select>
+    </div>
+    <div id="new-custom-city-wrap" style="display:none;" class="form-group">
+      <label class="form-label">Назва міста *</label>
+      <input class="form-input" id="new-custom-city" placeholder="Введіть місто" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Адреса *</label>
+      <input class="form-input" id="new-address" placeholder="Вул. Хрещатик, 1" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Посилання на Google Maps</label>
+      <input class="form-input" id="new-maps-url" type="url" placeholder="https://maps.app.goo.gl/..." />
+    </div>
+    <div class="section-label">Деталі</div>
+    <div class="form-group">
+      <label class="form-label">Мережа</label>
+      <select class="form-select" id="new-network" onchange="handleNetworkChange(this,'new-custom-net-wrap')">
+        <option value="">— не вказано —</option>
+        ${NETWORKS.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('')}
+        <option value="__custom__">Інша / невідома</option>
+      </select>
+    </div>
+    <div id="new-custom-net-wrap" style="display:none;" class="form-group">
+      <label class="form-label">Назва мережі</label>
+      <input class="form-input" id="new-custom-net" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">День оновлення *</label>
+      <select class="form-select" id="new-day">
+        <option value="">Оберіть день</option>
+        ${DAYS.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Оновлення відділу люкс</label>
+      <select class="form-select" id="new-lux">
+        <option value="Немає / не знаю">Немає / не знаю</option>
+        ${DAYS.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Коментар</label>
+      <textarea class="form-textarea" id="new-comment" placeholder="Будь-яка додаткова інформація"></textarea>
+    </div>
+    <button class="btn-submit" onclick="submitNew()">Надіслати пропозицію</button>
+    <input type="text" style="display:none;" id="new-honeypot" tabindex="-1" autocomplete="off" />
+  `;
+}
+
+function handleCityChange(sel) {
+  document.getElementById('new-custom-city-wrap').style.display = sel.value === '__custom__' ? 'block' : 'none';
+}
+
+function submitNew() {
+  if (document.getElementById('new-honeypot')?.value) return;
+
+  const cityEl = document.getElementById('new-city');
+  const customCityEl = document.getElementById('new-custom-city');
+  const addressEl = document.getElementById('new-address');
+  const dayEl = document.getElementById('new-day');
+
+  const cityRaw = cityEl.value;
+  const city = cityRaw === '__custom__' ? customCityEl.value.trim() : cityRaw;
+  const address = addressEl.value.trim();
+  const day = dayEl.value;
+
+  // Clear previous errors
+  [cityEl, customCityEl, addressEl, dayEl].forEach(el => el && el.classList.remove('invalid'));
+
+  let valid = true;
+  if (!city) { (cityRaw === '__custom__' ? customCityEl : cityEl).classList.add('invalid'); valid = false; }
+  if (!address) { addressEl.classList.add('invalid'); valid = false; }
+  if (!day) { dayEl.classList.add('invalid'); valid = false; }
+  if (!valid) { showSnackbar('Заповніть обов\'язкові поля'); return; }
+
+  if (!checkRateLimit()) { showSnackbar('Забагато заявок. Спробуйте пізніше.'); return; }
+
+  const mapsUrl = document.getElementById('new-maps-url').value.trim();
+  const netRaw = document.getElementById('new-network').value;
+  const network = netRaw === '__custom__' ? (document.getElementById('new-custom-net').value.trim()) : netRaw;
+  const lux = document.getElementById('new-lux').value;
+  const comment = document.getElementById('new-comment').value.trim();
+
+  fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({ type:'new_store', city, address, maps_url:mapsUrl, update_day:day, network, hours:'', lux_day:lux, comment }) }).catch(()=>{});
+  recordSubmit();
+  document.querySelector('#suggest-new-sheet .suggest-sheet-header').style.display = 'none';
+  document.getElementById('suggest-new-content').innerHTML = thankYouHtml(() => { document.querySelector('#suggest-new-sheet .suggest-sheet-header').style.display = ''; closeSheet('suggest-new-sheet'); });
+}
+
+// ── Rate limit ─────────────────────────────────────────────────────────────
+function checkRateLimit() {
+  try {
+    const times = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '[]');
+    const now = Date.now(); const tenMin = 10 * 60 * 1000;
+    const recent = times.filter(t => now - t < tenMin);
+    return recent.length < 100;
+  } catch(e) { return true; }
+}
+function recordSubmit() {
+  try {
+    const times = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '[]');
+    times.push(Date.now());
+    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(times.slice(-10)));
+  } catch(e) {}
+}
+
+// ── Sheets ─────────────────────────────────────────────────────────────────
+let openSheets = [];
+function openSheet(id) {
+  document.getElementById('sheet-overlay').classList.add('visible');
+  document.getElementById(id).classList.add('open');
+  openSheets.push(id);
+}
+function closeSheet(id) {
+  document.getElementById(id).classList.remove('open');
+  openSheets = openSheets.filter(s => s !== id);
+  if (openSheets.length === 0) document.getElementById('sheet-overlay').classList.remove('visible');
+}
+function closeAllSheets() {
+  [...openSheets].forEach(id => document.getElementById(id).classList.remove('open'));
+  openSheets = [];
+  document.getElementById('sheet-overlay').classList.remove('visible');
+  activeFilterType = null;
+}
+
+// ── Chips ──────────────────────────────────────────────────────────────────
+function renderChips(store, containerId) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  if (store.network) {
+    el.innerHTML += `<div class="info-chip chip-network">${iconStoreSmall()} ${esc(store.network)}</div><br>`;
+  }
+  el.innerHTML += `<div class="info-chip chip-yellow">${iconCalSmall()} ${esc(store.dayLabel)}</div>`;
+  if (store.luxDay) {
+    el.innerHTML += `<br><div class="info-chip chip-lux" style="margin-top:6px;">⭐ Люкс: ${esc(store.luxDay)}</div>`;
+  }
+}
+
+// ── Share ──────────────────────────────────────────────────────────────────
+async function shareStore(source) {
+  const store = source === 'panel' ? panelStore : selectedStore;
+  if (!store) return;
+  const mapsUrl = store.mapsUrl || (store.hasCoords
+    ? `https://www.google.com/maps?q=${store.lat},${store.lng}`
+    : null);
+  const shareText = `Дивись, який секонд є на bazasecond.com.ua!\n${store.address}, ${store.city}${store.dayLabel ? '\nДень оновлення: ' + store.dayLabel : ''}${mapsUrl ? '\nMaps: ' + mapsUrl : ''}\n\nhttps://bazasecond.com.ua/`;
+  if (navigator.share) {
+    try { await navigator.share({ title: 'База секондів України', text: shareText }); } catch(e) {}
+  } else {
+    try {
+      await navigator.clipboard.writeText(shareText);
+      showSnackbar('Посилання скопійовано');
+    } catch(e) { showSnackbar('Не вдалось скопіювати'); }
+  }
+}
+
+// ── Snackbar ───────────────────────────────────────────────────────────────
+let snackTimer;
+function showSnackbar(msg) {
+  const el = document.getElementById('snackbar');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(snackTimer);
+  snackTimer = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ── Thank you ──────────────────────────────────────────────────────────────
+function thankYouHtml(closeFn) {
+  const id = `ty-${Date.now()}`;
+  setTimeout(() => { const btn = document.getElementById(id); if(btn) btn.onclick = closeFn; }, 50);
+  return `<div class="thank-you">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    <h2>Дякуємо!</h2>
+    <p>Ваші зміни надіслано на перевірку.</p>
+    <button id="${id}" class="btn-submit">Закрити</button>
+  </div>`;
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function iconStore() { return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7l1-4h18l1 4"/><path d="M2 7c0 1.1.9 2 2 2s2-.9 2-2 .9 2 2 2 2-.9 2-2 .9 2 2 2 2-.9 2-2 .9 2 2 2 2-.9 2-2"/><rect x="4" y="9" width="16" height="12" rx="1"/><path d="M9 9v12M15 9v12"/></svg>`; }
+function iconStoreSmall() { return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7l1-4h18l1 4"/><path d="M2 7c0 1.1.9 2 2 2s2-.9 2-2 .9 2 2 2 2-.9 2-2 .9 2 2 2 2-.9 2-2 .9 2 2 2 2-.9 2-2"/><rect x="4" y="9" width="16" height="12" rx="1"/><path d="M9 9v12M15 9v12"/></svg>`; }
+function iconCalSmall() { return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`; }
+function iconFavFill() { return `<svg viewBox="0 0 24 24" fill="#A84A42" stroke="#A84A42" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`; }
+function iconFavOutline() { return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`; }
+function iconNearMe() { return `<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg>`; }
+
+// ── Privacy screen ─────────────────────────────────────────────────────────
+const PRIVACY_HTML = `
+<h2 style="font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--green);text-transform:uppercase;margin:0 0 10px;">Загальна інформація</h2>
+<p>База секондів України (<strong>bazasecond.com.ua</strong>) – вебсайт для пошуку секонд-хендів України. Ми серйозно ставимося до вашої приватності й намагаємося збирати мінімум даних, необхідних для роботи сайту.</p>
+<hr style="border:none;border-top:1px solid var(--card-border);margin:24px 0;">
+<h2 style="font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--green);text-transform:uppercase;margin:0 0 10px;">Що ми збираємо</h2>
+<p><strong>Аналітика Google Analytics (анонімна)</strong></p>
+<p>Ми використовуємо Google Analytics 4 для розуміння того, як користувачі взаємодіють із сайтом. Ці дані анонімні та не дозволяють ідентифікувати вас особисто.</p>
+<ul style="padding-left:20px;margin:0 0 14px;">
+  <li>Які сторінки та функції переглядаються</li>
+  <li>Географічний регіон (без точного місцеположення)</li>
+  <li>Тип пристрою та браузер</li>
+  <li>Кількість візитів та їх тривалість</li>
+</ul>
+<p style="font-size:13px;color:var(--on-surface-variant);background:var(--surface-variant);border-left:3px solid var(--green);border-radius:6px;padding:12px 14px;margin:0 0 16px;">Google Analytics не збирає ім'я, email або номер телефону. Ви можете відмовитися від відстеження через <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener" style="color:var(--green);">розширення для браузера</a>.</p>
+<p><strong>Геолокація</strong></p>
+<p>Сайт може запитувати доступ до вашого місцеположення для відображення найближчих магазинів на карті. Координати використовуються лише локально у вашому браузері — ми їх не зберігаємо і нікому не передаємо.</p>
+<p><strong>Обране та налаштування</strong></p>
+<p>Список обраних магазинів і обрані фільтри зберігаються виключно у вашому браузері (localStorage). Ми не маємо доступу до цих даних.</p>
+<p><strong>Пропозиції користувачів</strong></p>
+<p>Якщо ви надсилаєте пропозицію щодо нового магазину або зміни інформації, ми зберігаємо введені вами дані (місто, адреса, коментар) у Google Sheets. Особисті дані не є обов'язковими і не запитуються.</p>
+<hr style="border:none;border-top:1px solid var(--card-border);margin:24px 0;">
+<h2 style="font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--green);text-transform:uppercase;margin:0 0 10px;">Що ми НЕ збираємо</h2>
+<ul style="padding-left:20px;margin:0 0 14px;">
+  <li>Ім'я, email або номер телефону</li>
+  <li>Паролі або платіжну інформацію</li>
+  <li>Точне місцеположення без вашого дозволу</li>
+  <li>Вміст буфера обміну або інших вкладок</li>
+</ul>
+<hr style="border:none;border-top:1px solid var(--card-border);margin:24px 0;">
+<h2 style="font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--green);text-transform:uppercase;margin:0 0 10px;">Сторонні сервіси</h2>
+<ul style="padding-left:20px;margin:0 0 14px;">
+  <li><strong>Google Analytics 4</strong> — анонімна аналітика поведінки</li>
+  <li><strong>OpenStreetMap / <a href="https://leafletjs.com" target="_blank" rel="noopener" style="color:var(--green);">Leaflet</a></strong> — інтерактивна карта (дані © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" style="color:var(--green);">OpenStreetMap</a> contributors)</li>
+  <li><strong>Google Maps</strong> — відкриття маршруту (за вашим запитом)</li>
+  <li><strong>Google Sheets</strong> — зберігання пропозицій від користувачів</li>
+</ul>
+<hr style="border:none;border-top:1px solid var(--card-border);margin:24px 0;">
+<h2 style="font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--green);text-transform:uppercase;margin:0 0 10px;">Ваші права</h2>
+<ul style="padding-left:20px;margin:0 0 14px;">
+  <li>Заборонити доступ до геолокації в налаштуваннях браузера</li>
+  <li>Відмовитися від Google Analytics через <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener" style="color:var(--green);">офіційне розширення</a></li>
+  <li>Очистити збережені дані через очищення localStorage у браузері</li>
+</ul>
+<hr style="border:none;border-top:1px solid var(--card-border);margin:24px 0;">
+<h2 style="font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--green);text-transform:uppercase;margin:0 0 10px;">Зв'язок</h2>
+<p>Маєте питання щодо приватності? Напишіть нам: <a href="mailto:sviatoslav.parashchak@gmail.com" style="color:var(--green);">sviatoslav.parashchak@gmail.com</a></p>
+`;
+
+function openPrivacy() {
+  document.getElementById('privacy-content').innerHTML = PRIVACY_HTML;
+  document.getElementById('privacy-screen').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closePrivacy() {
+  document.getElementById('privacy-screen').style.display = 'none';
+  document.body.style.overflow = '';
+}
+</script>
+</body>
+</html>
