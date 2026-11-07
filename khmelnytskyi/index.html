@@ -1186,6 +1186,7 @@ const CACHE_VERSION_KEY = 'sh_version';
 const CACHE_TTL = 24 * 60 * 60 * 1000;
 const VERSION_URL = 'https://raw.githubusercontent.com/Sviatopol/secondhand-data/main/data/version.txt';
 const DAYS = ['Понеділок','Вівторок','Середа','Четвер',"П'ятниця",'Субота','Неділя'];
+const NO_DAY_VALUE = '__no_day__';
 const DAY_SHORT = {'Понеділок':'пн','Вівторок':'вт','Середа':'ср','Четвер':'чт',"П'ятниця":'пт','Субота':'сб','Неділя':'нд'};
 const NETWORKS = ['Humana','EconomClass','EUROMARKA','КАЛАМБУР','Баул','Тюк','Шмотка','Євро Секонд Хенд','БОМБА'];
 const CITIES = ['Львів','Івано-Франківськ','Тернопіль','Київ','Дніпро','Одеса','Харків','Рівне','Чернівці','Луцьк','Житомир','Хмельницький','Ужгород','Вінниця','Черкаси','Полтава','Чернігів','Суми','Кропивницький','Миколаїв','Херсон'];
@@ -1593,6 +1594,19 @@ function openFilter(type) {
       });
       list.appendChild(item);
     });
+    const hr2 = document.createElement('hr'); hr2.className = 'filter-divider';
+    list.appendChild(hr2);
+    const noDay = document.createElement('div');
+    noDay.className = 'filter-item' + (currentDay === NO_DAY_VALUE ? ' selected' : '');
+    noDay.innerHTML = `<span class="fi-label">Без фіксованого дня оновлення</span><svg class="fi-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+    noDay.addEventListener('click', () => {
+      currentDay = NO_DAY_VALUE;
+      closeAllSheets();
+      updateDayFilterUI();
+      renderList();
+      renderMap();
+    });
+    list.appendChild(noDay);
   }
 
   openSheet('filter-sheet');
@@ -1607,7 +1621,7 @@ function updateCityFilterUI() {
 function updateDayFilterUI() {
   const btn = document.getElementById('day-filter-btn');
   const lbl = document.getElementById('day-label');
-  lbl.textContent = currentDay || 'Будь-який день';
+  lbl.textContent = currentDay === NO_DAY_VALUE ? 'Без фікс. дня' : (currentDay || 'Будь-який день');
   btn.classList.toggle('active', !!currentDay);
 }
 
@@ -1658,7 +1672,8 @@ function goToStoreOnMap(store) {
 // ── List rendering ─────────────────────────────────────────────────────────
 function getFilteredStores() {
   let stores = currentCity ? (allData[currentCity] || []) : Object.values(allData).flat();
-  if (currentDay) stores = stores.filter(s => s.updateDay === currentDay);
+  if (currentDay === NO_DAY_VALUE) stores = stores.filter(s => !s.updateDay);
+  else if (currentDay) stores = stores.filter(s => s.updateDay === currentDay);
   if (sortByDistance && userLat !== null) {
     stores = [...stores].sort((a, b) => {
       const da = distanceTo(a), db = distanceTo(b);
@@ -1797,7 +1812,8 @@ function renderMap() {
   mapMarkers = {};
   let stores = Object.values(allData).flat();
   if (currentCity) stores = allData[currentCity] || [];
-  if (currentDay) stores = stores.filter(s => s.updateDay === currentDay);
+  if (currentDay === NO_DAY_VALUE) stores = stores.filter(s => !s.updateDay);
+  else if (currentDay) stores = stores.filter(s => s.updateDay === currentDay);
   const visible = stores.filter(s => s.hasCoords);
   document.getElementById('map-count-num').textContent = visible.length;
   visible.forEach(store => {
