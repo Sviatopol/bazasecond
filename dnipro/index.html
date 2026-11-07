@@ -2192,7 +2192,8 @@ function goToStoreOnMap(store) {
 // ── List rendering ─────────────────────────────────────────────────────────
 function getFilteredStores() {
   let stores = currentCity ? (allData[currentCity] || []) : Object.values(allData).flat();
-  if (currentDay === NO_DAY_VALUE) stores = stores.filter(s => !s.updateDay);
+  const KNOWN_DAYS = ['Понеділок','Вівторок','Середа','Четвер',"П'ятниця","Пʼятниця",'Субота','Неділя'];
+  if (currentDay === NO_DAY_VALUE) stores = stores.filter(s => !s.updateDay || !KNOWN_DAYS.includes(s.updateDay));
   else if (currentDay) stores = stores.filter(s => s.updateDay === currentDay);
   if (sortByDistance && userLat !== null) {
     stores = [...stores].sort((a, b) => {
@@ -2332,7 +2333,8 @@ function renderMap() {
   mapMarkers = {};
   let stores = Object.values(allData).flat();
   if (currentCity) stores = allData[currentCity] || [];
-  if (currentDay === NO_DAY_VALUE) stores = stores.filter(s => !s.updateDay);
+  const KNOWN_DAYS_MAP = ['Понеділок','Вівторок','Середа','Четвер',"П'ятниця","Пʼятниця",'Субота','Неділя'];
+  if (currentDay === NO_DAY_VALUE) stores = stores.filter(s => !s.updateDay || !KNOWN_DAYS_MAP.includes(s.updateDay));
   else if (currentDay) stores = stores.filter(s => s.updateDay === currentDay);
   const visible = stores.filter(s => s.hasCoords);
   document.getElementById('map-count-num').textContent = visible.length;
@@ -2373,7 +2375,7 @@ function selectMapStore(store) {
     else if (store.hasCoords) window.open(`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`, '_blank');
   };
   document.getElementById('map-store-panel').classList.add('open');
-  mainMap.panTo([store.lat, store.lng]);
+  if (store.hasCoords) mainMap.panTo([store.lat, store.lng]);
 }
 
 function closeMapPanel() {
