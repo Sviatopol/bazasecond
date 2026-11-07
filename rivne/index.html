@@ -2344,7 +2344,7 @@ async function shareStore(source) {
   const mapsUrl = store.mapsUrl || (store.hasCoords
     ? `https://www.google.com/maps?q=${store.lat},${store.lng}`
     : null);
-  const shareText = `Дивись, який секонд є на bazasecond.com.ua!\n${store.address}, ${store.city}${store.dayLabel ? '\nДень оновлення: ' + store.dayLabel : ''}${mapsUrl ? '\nMaps: ' + mapsUrl : ''}\n\nhttps://bazasecond.com.ua/`;
+  const shareText = `Дивись, який секонд є на\n${store.address}, ${store.city}${store.dayLabel ? '\nДень оновлення: ' + store.dayLabel : ''}${mapsUrl ? '\nGoogle Maps: ' + mapsUrl : ''}\n\nhttps://bazasecond.com.ua/`;
   if (navigator.share) {
     try { await navigator.share({ title: 'База секондів України', text: shareText }); } catch(e) {}
   } else {
