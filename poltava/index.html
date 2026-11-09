@@ -14,11 +14,11 @@
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1472109228369865"
      crossorigin="anonymous"></script>
-  <title>Секонд-хенди у Полтаві — адреси, карта, дні поповнення | База секондів України</title>
-  <meta name="description" content="Секонд-хенди Полтави на карті. Humana, EconomClass, EUROMARKA, Євро Секонд Хенд та інші мережі. Адреси, дні поповнення та інша інформація. Оновлюється користувачами регулярно.">
+  <title>Секонд-хенди у Полтаві — адреси, карта, дні завозу та оновлення | База секондів України</title>
+  <meta name="description" content="Секонд-хенди Полтави на карті. Humana, EconomClass, EUROMARKA, Євро Секонд Хенд та інші мережі. Адреси, дні завозу та оновлення. Оновлюється користувачами регулярно.">
   <meta name="keywords" content="секонд-хенд полтава, секонд полтава, секонд-хенди полтави, Полтава, секонд-хенд, Humana, EconomClass, EUROMARKA">
   <meta property="og:title" content="Секонд-хенди Полтави | База секондів України">
-  <meta property="og:description" content="Секонд-хенди Полтави на карті. Humana, EconomClass, EUROMARKA, Євро Секонд Хенд та інші мережі. Адреси, дні поповнення та інша інформація. Оновлюється користувачами регулярно.">
+  <meta property="og:description" content="Секонд-хенди Полтави на карті. Humana, EconomClass, EUROMARKA, Євро Секонд Хенд та інші мережі. Адреси, дні завозу та оновлення. Оновлюється користувачами регулярно.">
   <meta property="og:url" content="https://bazasecond.com.ua/poltava/">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://bazasecond.com.ua/icon-512.png">
@@ -597,7 +597,7 @@
   "@context": "https://schema.org",
   "@type": "ItemList",
   "name": "Секонд-хенди Полтави",
-  "description": "Список секонд-хендів у місті Полтава: адреси, мережі, дні поповнення.",
+  "description": "Список секонд-хендів у місті Полтава: адреси, мережі, дні завозу та оновлення.",
   "url": "https://bazasecond.com.ua/poltava/",
   "numberOfItems": 8,
   "itemListElement": [
@@ -1215,7 +1215,7 @@ function injectJsonLd() {
     "@context": "https://schema.org",
     "@type": "ItemList",
     "name": "Секонд-хенди України",
-    "description": "Список секонд-хендів у містах України: адреси, мережі, дні поповнення.",
+    "description": "Список секонд-хендів у містах України: адреси, мережі, дні завозу та оновлення.",
     "url": "https://bazasecond.com.ua/",
     "numberOfItems": stores.length,
     "itemListElement": stores.map((s, i) => ({
@@ -1483,7 +1483,7 @@ function openFilter(type) {
         if (slug) history.replaceState(null, '', '/' + slug + '/');
         const cityLocative = {"Львів":"Львові","Київ":"Києві","Харків":"Харкові","Дніпро":"Дніпрі","Одеса":"Одесі","Тернопіль":"Тернополі","Івано-Франківськ":"Івано-Франківську","Рівне":"Рівному","Чернівці":"Чернівцях","Луцьк":"Луцьку","Житомир":"Житомирі","Хмельницький":"Хмельницькому","Ужгород":"Ужгороді","Вінниця":"Вінниці","Черкаси":"Черкасах","Полтава":"Полтаві","Чернігів":"Чернігові","Суми":"Сумах","Кропивницький":"Кропивницькому","Миколаїв":"Миколаєві","Херсон":"Херсоні"};
         const cityInLoc = cityLocative[city] || city;
-        document.title = `Секонд-хенди у ${cityInLoc} — адреси, карта, дні поповнення | База секондів України`;
+        document.title = `Секонд-хенди у ${cityInLoc} — адреси, карта, дні завозу та оновлення | База секондів України`;
         closeAllSheets();
         updateCityFilterUI();
         renderList();
