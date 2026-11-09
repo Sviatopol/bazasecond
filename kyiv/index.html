@@ -1910,7 +1910,7 @@
   <!-- AppBar -->
   <div id="appbar">
     <div id="appbar-top">
-      <h1 id="appbar-title">База секондів</h1>
+      <h1 id="appbar-title">Секонд-хенди у Києві</h1>
       <button id="suggest-new-btn" onclick="openSuggestNew()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Запропонувати секонд
@@ -2707,7 +2707,7 @@ function switchTab(tab) {
   // Filters: visible only on list + map
   document.getElementById('filters').style.display = (tab === 'list' || tab === 'map') ? 'flex' : 'none';
   // AppBar: hide title row on list too (title gone), show only on favs/info
-  const titles = { list: 'База секондів', map: 'Карта', favs: 'Обрані', info: 'Інфо' };
+  const titles = { list: 'Секонд-хенди в Україні', map: 'Карта', favs: 'Обрані', info: 'Інфо' };
   document.getElementById('appbar-title').textContent = titles[tab];
   document.getElementById('appbar-top').style.display = (tab === 'favs' || tab === 'info') ? 'flex' : 'none';
   document.getElementById('suggest-new-btn').style.display = 'none';
