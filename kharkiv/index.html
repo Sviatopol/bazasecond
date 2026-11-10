@@ -2053,6 +2053,7 @@ function updateAppbarHeight() {
   renderFavs();
   tryGetLocation();
   switchTab('map');
+  handleDeepLink();
 })();
 
 function injectJsonLd() {
@@ -2075,7 +2076,7 @@ function injectJsonLd() {
     "@context": "https://schema.org",
     "@type": "ItemList",
     "name": "Секонд-хенди України",
-    "description": "Список секонд-хендів у містах України: адреси, мережі, дні завозу та оновлення.",
+    "description": "Список секонд-хендів у містах України: адреси, мережі, дні поповнення.",
     "url": "https://bazasecond.com.ua/",
     "numberOfItems": stores.length,
     "itemListElement": stores.map((s, i) => ({
@@ -2168,6 +2169,7 @@ function parseData(raw) {
         updateNote: s.update_note || '',
         lat: parseFloat(s.lat) || 0,
         lng: parseFloat(s.lng) || 0,
+        id: s.id ?? null,
         network: s.network || '',
         hours: s.hours || '',
         luxDay: s.lux_day || '',
@@ -2343,7 +2345,7 @@ function openFilter(type) {
         if (slug) history.replaceState(null, '', '/' + slug + '/');
         const cityLocative = {"Львів":"Львові","Київ":"Києві","Харків":"Харкові","Дніпро":"Дніпрі","Одеса":"Одесі","Тернопіль":"Тернополі","Івано-Франківськ":"Івано-Франківську","Рівне":"Рівному","Чернівці":"Чернівцях","Луцьк":"Луцьку","Житомир":"Житомирі","Хмельницький":"Хмельницькому","Ужгород":"Ужгороді","Вінниця":"Вінниці","Черкаси":"Черкасах","Полтава":"Полтаві","Чернігів":"Чернігові","Суми":"Сумах","Кропивницький":"Кропивницькому","Миколаїв":"Миколаєві","Херсон":"Херсоні"};
         const cityInLoc = cityLocative[city] || city;
-        document.title = `Секонд-хенди у ${cityInLoc} — адреси, карта, дні завозу та оновлення | База секондів України`;
+        document.title = `Секонд-хенди у ${cityInLoc} — адреси, карта, дні поповнення | База секондів України`;
         closeAllSheets();
         updateCityFilterUI();
         renderList();
@@ -2928,17 +2930,34 @@ function renderChips(store, containerId) {
 async function shareStore(source) {
   const store = source === 'panel' ? panelStore : selectedStore;
   if (!store) return;
-  const mapsUrl = store.mapsUrl || (store.hasCoords
-    ? `https://www.google.com/maps?q=${store.lat},${store.lng}`
-    : null);
-  const shareText = `Дивись, який секонд є на\n${store.address}, ${store.city}${store.dayLabel ? '\nДень оновлення: ' + store.dayLabel : ''}${mapsUrl ? '\nGoogle Maps: ' + mapsUrl : ''}\n\nhttps://bazasecond.com.ua/`;
+  const storeUrl = store.id != null
+    ? `https://bazasecond.com.ua/?id=${store.id}`
+    : `https://bazasecond.com.ua/`;
+  const shareText = `Дивись, який секонд є на\n${store.address}, ${store.city}${store.dayLabel ? '\nДень оновлення: ' + store.dayLabel : ''}\n\n${storeUrl} `;
   if (navigator.share) {
-    try { await navigator.share({ title: 'База секондів України', text: shareText }); } catch(e) {}
+    try { await navigator.share({ title: store.address, text: shareText }); } catch(e) {}
   } else {
     try {
-      await navigator.clipboard.writeText(shareText);
+      await navigator.clipboard.writeText(storeUrl);
       showSnackbar('Посилання скопійовано');
     } catch(e) { showSnackbar('Не вдалось скопіювати'); }
+  }
+}
+
+// ── Deep link ──────────────────────────────────────────────────────────────
+function handleDeepLink() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (!id) return;
+  const store = Object.values(allData).flat().find(x => x.id === parseInt(id, 10));
+  if (store) {
+    currentDay = null;
+    currentCity = store.city;
+    updateCityFilterUI();
+    updateDayFilterUI();
+    renderMap();
+    renderList();
+    goToStoreOnMap(store);
   }
 }
 
