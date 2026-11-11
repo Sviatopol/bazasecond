@@ -1232,9 +1232,7 @@ function injectJsonLd() {
 }
 
 function loadTodayFilter() {
-  const wd = new Date().getDay(); // 0=sun
-  const idx = wd === 0 ? 6 : wd - 1;
-  currentDay = DAYS[idx];
+  // currentDay залишається null → "Будь-який день" за замовчуванням
   updateDayFilterUI();
 }
 
