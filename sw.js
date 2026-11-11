@@ -1,4 +1,5 @@
-const CACHE_NAME = 'sh-static-v1';
+const CACHE_VERSION = '202611111041'; // підставляється generate_pages.py
+const CACHE_NAME = `sh-static-v${CACHE_VERSION}`;
 
 // Static assets to cache on install
 const STATIC_ASSETS = [
@@ -37,8 +38,11 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Network-first for index.html
-  if (url.includes('bazasecond.com.ua') && !url.includes('.')) {
+  // Network-first for HTML pages (index.html)
+  if (
+    event.request.mode === 'navigate' ||
+    (event.request.method === 'GET' && event.request.headers.get('accept')?.includes('text/html'))
+  ) {
     event.respondWith(
       fetch(event.request)
         .then(response => {
