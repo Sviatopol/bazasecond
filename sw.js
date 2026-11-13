@@ -1,4 +1,4 @@
-const CACHE_VERSION = '202611131209'; // підставляється generate_pages.py
+const CACHE_VERSION = '202611131235'; // підставляється generate_pages.py
 const CACHE_NAME = `sh-static-v${CACHE_VERSION}`;
 
 // Static assets to cache on install
