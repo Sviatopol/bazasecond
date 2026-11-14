@@ -2394,7 +2394,17 @@ function closePrivacy() {
 }
 
 // ── Map Search Overlay ────────────────────────────────────────────────────
+// Snapshot of filters at the moment the map search overlay was opened
+let _mapSearchSavedCity = null;
+let _mapSearchSavedDay = null;
+let _mapSearchDidNavigate = false;
+
 function openMapSearch() {
+  // Save current filter state so we can restore on back
+  _mapSearchSavedCity = currentCity;
+  _mapSearchSavedDay = currentDay;
+  _mapSearchDidNavigate = false;
+
   const overlay = document.getElementById('map-search-overlay');
   overlay.classList.add('open');
   const input = document.getElementById('map-search-input');
@@ -2407,6 +2417,19 @@ function openMapSearch() {
 
 function closeMapSearch() {
   document.getElementById('map-search-overlay').classList.remove('open');
+  if (!_mapSearchDidNavigate) {
+    // User pressed back without choosing a result — restore filters
+    currentCity = _mapSearchSavedCity;
+    currentDay = _mapSearchSavedDay;
+    if (currentCity) {
+      localStorage.setItem('sh_city', currentCity);
+    } else {
+      localStorage.setItem('sh_city', '__all__');
+    }
+    updateCityFilterUI();
+    updateDayFilterUI();
+    renderMap();
+  }
 }
 
 function onMapSearchInput(val) {
@@ -2458,6 +2481,13 @@ function onMapSearchInput(val) {
         ${isFav ? iconFavFill() : iconFavOutline()}
       </button>`;
     card.addEventListener('click', () => {
+      // Reset all filters so the destination store is always visible on the map
+      currentCity = null;
+      currentDay = null;
+      localStorage.setItem('sh_city', '__all__');
+      updateCityFilterUI();
+      updateDayFilterUI();
+      _mapSearchDidNavigate = true;
       closeMapSearch();
       goToStoreOnMap(store);
     });
