@@ -75,8 +75,11 @@
       overflow: hidden;
     }
 
+    /* ── Root wrapper (banner + app) ── */
+    #root { display: flex; flex-direction: column; height: 100%; }
+
     /* ── App shell ── */
-    #app { display: flex; flex-direction: column; height: 100%; }
+    #app { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
     /* ── AppBar ── */
     #appbar {
@@ -105,6 +108,11 @@
       background: transparent;
       pointer-events: none;
     }
+    /* When banner is visible, offset the absolute appbar down */
+    #app-banner.visible ~ #app.map-active #appbar,
+    #root:has(#app-banner.visible) #app.map-active #appbar {
+      top: var(--banner-h, 0px);
+    }
     #app.map-active #appbar * {
       pointer-events: auto;
     }
@@ -126,6 +134,10 @@
     }
     #app.map-active #content {
       margin-top: calc(-1 * var(--appbar-h, 110px));
+    }
+    /* Shrink map content when banner is visible so it doesn't go under banner */
+    :root:has(#app-banner.visible) #app.map-active #content {
+      margin-top: calc(-1 * var(--appbar-h, 110px) + var(--banner-h, 0px));
     }
     #appbar-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
     #appbar h1 { font-size: 17px; font-weight: 700; }
@@ -740,6 +752,67 @@
       white-space: nowrap; max-width: calc(100vw - 32px);
     }
     #snackbar.show { opacity: 1; }
+  /* ── Android App Banner ── */
+  #app-banner {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    background: #C0453A;
+    border-bottom: 1px solid #A03830;
+    padding: 8px 12px;
+    padding-top: calc(8px + env(safe-area-inset-top, 0px));
+    position: relative;
+    z-index: 2000;
+    flex-shrink: 0;
+  }
+  #app-banner.visible { display: flex; }
+  #app-banner-close {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px;
+    flex-shrink: 0;
+  }
+  #app-banner-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    object-fit: cover;
+  }
+  #app-banner-text {
+    flex: 1;
+    min-width: 0;
+  }
+  #app-banner-text strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #C8C84A;
+    white-space: normal;
+    line-height: 1.3;
+  }
+  #app-banner-text span {
+    display: none;
+  }
+  #app-banner-btn {
+    background: #C8C84A;
+    color: #3A1A18;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Roboto', sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    text-decoration: none;
+    display: inline-block;
+  }
   </style>
   <script>
     if ('serviceWorker' in navigator) {
@@ -757,6 +830,18 @@
   </script>
 </head>
 <body>
+
+<div id="root">
+<!-- Android App Install Banner -->
+<div id="app-banner">
+  <button id="app-banner-close" aria-label="Закрити">✕</button>
+  <img id="app-banner-icon" src="/icon-192.png" alt="База секондів" onerror="this.src='/favicon.ico'">
+  <div id="app-banner-text">
+    <strong>Завантаж «База секондів України» на Google Play!</strong>
+  </div>
+  <a id="app-banner-btn" href="https://play.google.com/store/apps/details?id=com.sviatoslav.secondhand" target="_blank" rel="noopener">Встановити</a>
+</div>
+
 <div id="app" class="map-active">
   <!-- AppBar -->
   <div id="appbar">
@@ -895,6 +980,20 @@
         <div class="info-section-header">ПРО ДАНІ</div>
         <div class="info-card">
           <p class="info-text">Усі дані зібрано з відкритих джерел, а оновлюються вони завдяки пропозиціям користувачів. Незважаючи на зусилля, які вкладаються в підтримку актуальності даних, інформація, в окремих випадках, може не відповідати дійсності або бути застарілою.</p>
+        </div>
+        <div style="height:8px;"></div>
+        <div class="info-section-header">ДОДАТОК</div>
+        <div class="info-card">
+          <a class="info-link-tile" href="https://play.google.com/store/apps/details?id=com.sviatoslav.secondhand" target="_blank">
+            <div class="info-link-icon" style="background:rgba(100,221,23,0.12);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 20.5v-17c0-.83 1-.83 1.5-.5l15 8.5-15 8.5C3.5 21.33 3 21.33 3 20.5z" fill="#64DD17"/></svg>
+            </div>
+            <div class="info-link-body">
+              <div class="info-link-title">Завантажити додаток</div>
+              <div class="info-link-sub">База секондів України - Google Play</div>
+            </div>
+            <svg class="info-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
         </div>
         <div style="height:8px;"></div>
         <div class="info-card">
@@ -1173,6 +1272,47 @@ function updateAppbarHeight() {
   const h = document.getElementById('appbar')?.offsetHeight || 110;
   document.documentElement.style.setProperty('--appbar-h', h + 'px');
 }
+
+// ── Android App Banner ──
+(function() {
+  const BANNER_KEY = 'app_banner_dismissed';
+  const banner = document.getElementById('app-banner');
+  if (!banner) return;
+
+  // Close button always works regardless of how banner was shown
+  document.getElementById('app-banner-close').addEventListener('click', function() {
+    banner.classList.remove('visible');
+    document.documentElement.style.setProperty('--banner-h', '0px');
+    localStorage.setItem(BANNER_KEY, '1');
+  });
+
+  const isAndroid = /android/i.test(navigator.userAgent);
+  const dismissed = localStorage.getItem(BANNER_KEY);
+  if (isAndroid && !dismissed) {
+    if (banner) {
+      banner.classList.add('visible');
+      // Expose banner height as CSS var so map-active layout can account for it
+      requestAnimationFrame(() => {
+        document.documentElement.style.setProperty('--banner-h', banner.offsetHeight + 'px');
+      });
+      document.getElementById('app-banner-btn').addEventListener('click', function() {
+        // Try to open Play Store app directly, fallback to web
+        const marketUrl = 'market://details?id=com.sviatoslav.secondhand';
+        const webUrl = 'https://play.google.com/store/apps/details?id=com.sviatoslav.secondhand';
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = marketUrl;
+        document.body.appendChild(iframe);
+        setTimeout(function() { document.body.removeChild(iframe); }, 1000);
+        setTimeout(function() {
+          if (document.hasFocus()) window.open(webUrl, '_blank');
+        }, 500);
+        localStorage.setItem(BANNER_KEY, '1');
+        setTimeout(function() { banner.classList.remove('visible'); }, 1000);
+      });
+    }
+  }
+})();
 
 (async function init() {
   // Measure appbar height and expose as CSS var for sheet max-height
@@ -2400,6 +2540,7 @@ function onMapSearchInput(val) {
   <div id="map-search-results"></div>
   <div id="map-search-empty" style="display:none;">Нічого не знайдено</div>
 </div>
+</div><!-- /#root -->
 
 </body>
 </html>
